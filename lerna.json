@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
+  "version": "independent",
+  "packages": [
+    "packages/solid-demo-fe",
+    "packages/solid-demo-be",
+    "packages/solid-admin"
+  ]
+}
