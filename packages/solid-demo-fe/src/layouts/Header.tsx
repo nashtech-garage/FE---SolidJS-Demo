@@ -1,9 +1,14 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Link, Typography, Menu, MenuItem } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Link, Menu, MenuItem } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
+import SettingsIcon from '@suid/icons-material/Settings';
+import SearchIcon from '@suid/icons-material/Search';
 import { createEffect, createSignal, For } from 'solid-js';
 
 import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
+import { SubHeader } from './SubHeader';
+import logoImg from '../assets/logo.png';
+import { textColor } from '../theme';
 
 const Header = () => {
   const cartCount = localStorage.getItem('cartCount') ?? 0;
@@ -31,29 +36,27 @@ const Header = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='fixed' color='primary'>
-        <Toolbar>
-          <Grid container>
+      <AppBar position='fixed' sx={{ boxShadow: 'none', backgroundColor: '#fff' }}>
+        <Toolbar sx={{ flexDirection: 'column' }} disableGutters>
+          <SubHeader />
+          <Grid container sx={{ paddingInline: 4 }}>
             <Grid item xs={3} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Typography
-                sx={{ fontSize: '1.3rem', color: '#fff', fontWeight: 'bold', border: '1px solid #fff', p: 1 }}>
-                NT Store
-              </Typography>
+              <img alt='logo' src={logoImg} height={56} />
             </Grid>
             <Grid
               item
               xs={0}
               md={6}
               sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <Link href='/' sx={{ color: '#fff', textTransform: 'uppercase' }}>
+              <Link href='/' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
                 Home
               </Link>
-              <Link href='/products' sx={{ color: '#fff', textTransform: 'uppercase' }}>
+              <Link href='/products' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
                 Products
               </Link>
               <Link
                 id='collection-btn'
-                sx={{ color: '#fff', textTransform: 'uppercase' }}
+                sx={{ textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer', color: textColor }}
                 aria-controls={open() ? 'basic-menu' : undefined}
                 aria-expanded={open() ? 'true' : undefined}
                 aria-haspopup='true'
@@ -77,7 +80,13 @@ const Header = () => {
             <Grid item xs={9} md={3}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <IconButton>
-                  <ShoppingCartIcon sx={{ color: '#fff' }} />
+                  <SearchIcon />
+                </IconButton>
+                <IconButton>
+                  <SettingsIcon />
+                </IconButton>
+                <IconButton>
+                  <ShoppingCartIcon />
                 </IconButton>
                 <Box as='p'>{cartCount}</Box>
               </Box>
