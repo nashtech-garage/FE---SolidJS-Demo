@@ -1,21 +1,12 @@
 import { useParams } from '@solidjs/router';
 import { createEffect, createSignal } from 'solid-js';
 import { Container, Box, Grid, IconButton, Button, Typography } from '@suid/material';
-import { createQuery } from '@tanstack/solid-query'
+import { createQuery } from '@tanstack/solid-query';
 
 import { Footer } from '../../layouts/Footer';
 import { medusaClient } from '../../utils';
-import { getProductPrice } from '../../utils/productHelper';
-
-const addProduct = async (cartId: string, product: any) => {
-  const { cart } = await medusaClient.carts.lineItems.create(cartId, {
-    variant_id: product?.variants[0].id,
-    quantity: 1,
-  });
-  console.log(cart);
-  localStorage.setItem('cartCount', cart.items.length);
-  setTimeout(() => window.location.reload(), 5000);
-};
+import { addProduct, getProductPrice } from '../../utils/productHelper';
+import { useCart } from '../../components/CartProvider';
 
 function SingleProduct() {
   const [regionId, setRegionId] = createSignal<string>('');
@@ -24,7 +15,11 @@ function SingleProduct() {
   if (!productId) {
     return null;
   }
-  const productQuery = createQuery(() => ['product-detail-' + productId], () => medusaClient.products.retrieve(productId))
+  const productQuery = createQuery(
+    () => ['product-detail-' + productId],
+    () => medusaClient.products.retrieve(productId)
+  );
+  const { updateCart } = useCart();
 
   createEffect(() => {
     const fetchRegions = async () => {
@@ -36,15 +31,7 @@ function SingleProduct() {
   });
 
   const handleAddToCart = async () => {
-    const cartId = localStorage.getItem('cartId');
-
-    if (cartId) {
-      addProduct(cartId, productQuery.data?.product);
-    } else {
-      const { cart } = await medusaClient.carts.create({ region_id: regionId() });
-      localStorage.setItem('cartId', cart.id);
-      addProduct(cart.id, productQuery.data?.product);
-    }
+    addProduct(productQuery.data?.product, regionId(), updateCart)
   };
 
   return (

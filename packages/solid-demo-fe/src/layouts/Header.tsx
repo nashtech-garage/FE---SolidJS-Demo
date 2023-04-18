@@ -4,13 +4,14 @@ import { createEffect, createSignal, For } from 'solid-js';
 
 import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
+import { useCart } from '../components/CartProvider';
 
 const Header = () => {
-  const cartCount = localStorage.getItem('cartCount') ?? 0;
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
   const [collections, setCollections] = createSignal<ICollection[]>([]);
-
+  const { cart } = useCart()
+  
   const handlePopoverOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget as HTMLElement);
     setOpen(true);
@@ -79,7 +80,7 @@ const Header = () => {
                 <IconButton>
                   <ShoppingCartIcon sx={{ color: '#fff' }} />
                 </IconButton>
-                <Box as='p'>{cartCount}</Box>
+                <Box as='p'>{cart().items.length}</Box>
               </Box>
             </Grid>
           </Grid>
