@@ -4,20 +4,14 @@ import { Close as CloseIcon } from '@suid/icons-material';
 import { grey } from '@suid/material/colors';
 
 import { getSnackbarVariant } from '../../utils';
+import { SnackbarProps } from '../../providers';
 
-export interface SnackbarProps {
-  id: string;
-  message: string;
-  delay: number;
-  variant?: 'success' | 'warning' | 'error';
-  title?: string;
+interface SnackbarItemProps extends SnackbarProps {
   onClose?: (id: string) => void;
 }
 
-const SnackbarItem: Component<SnackbarProps> = ({ variant = 'success', message, delay, id, title, onClose }) => {
-  const handleClose = () => {
-    onClose && onClose(id);
-  };
+const SnackbarItem: Component<SnackbarItemProps> = ({ variant = 'success', message, delay, id, title, onClose }) => {
+  const handleClose = () => onClose && onClose(id);
   const { icon: Icon, color } = getSnackbarVariant(variant);
   const delayAnimation = (delay / 1000).toFixed(1);
 

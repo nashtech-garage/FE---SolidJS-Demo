@@ -5,10 +5,12 @@ import { Portal } from 'solid-js/web';
 import { SnackbarContext } from '../contexts';
 import { Snackbar } from '../components';
 
-interface SnackbarProps {
+export interface SnackbarProps {
   id: string;
+  title?: string;
   message: string;
   delay: number;
+  variant?: 'success' | 'warning' | 'error';
   timerId?: ReturnType<typeof setTimeout>;
 }
 
@@ -20,8 +22,8 @@ interface SnackbarProviderProps {
 const SnackbarProvider = (props: SnackbarProviderProps): JSX.Element => {
   const [queue, setQueue] = createSignal<SnackbarProps[]>([]);
   const { maxSnack = 3 } = props;
-  const push = (message: string, delay = 3000) => {
-    const newQueue = { message, delay, id: uuidv4() };
+  const push = (message: string, variant?: 'success' | 'warning' | 'error', title?: string, delay = 3000) => {
+    const newQueue = { message, delay, id: uuidv4(), variant, title };
     setQueue((prevQueue: SnackbarProps[]) => {
       if (prevQueue.length < maxSnack) {
         return [...prevQueue, newQueue];
@@ -38,9 +40,6 @@ const SnackbarProvider = (props: SnackbarProviderProps): JSX.Element => {
     setQueue(queue().filter((q) => q.id !== id));
   };
 
-  const pushSnackbar = (message: string, timeout?: number) => {
-    push(message, timeout);
-  };
   createEffect(() => {
     queue().forEach((s) => {
       s.timerId = setTimeout(() => shift(s.id), s.delay + 1000);
@@ -51,7 +50,7 @@ const SnackbarProvider = (props: SnackbarProviderProps): JSX.Element => {
     queue().forEach((s) => s.timerId && clearTimeout(s.timerId));
   });
 
-  const valueProvider = createMemo(() => ({ pushSnackbar }));
+  const valueProvider = createMemo(() => ({ pushSnackbar: push }));
 
   return (
     <SnackbarContext.Provider value={valueProvider()}>
