@@ -1,0 +1,49 @@
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(calc(100% + 32px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.snackbar-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  transition: transform 0.3s ease-in-out;
+}
+
+.snackbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  margin-block: 8px;
+  transition: all linear 0.3s;
+  background-color: #fff;
+}
+
+.snackbar--success {
+  border-left: 4px solid #76ff03;
+}
+
+.snackbar__message {
+  flex: 1;
+}
+
+.snackbar__close-button {
+  color: #fff;
+}
