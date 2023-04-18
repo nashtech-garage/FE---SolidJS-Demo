@@ -1,20 +1,12 @@
 //ProductList.jsx
-import { createEffect, createSignal, For } from 'solid-js';
-import { Box, Typography, Link } from '@suid/material';
+import { Box, Typography } from '@suid/material';
 import { medusaClient } from '../utils/medusaClient';
-import { IProduct } from '../types';
 import ProductItem from './ProductItem/ProductItem';
+import { createQuery} from '@tanstack/solid-query'
+import { For } from 'solid-js';
 
 function ProductList() {
-  const [products, setProducts] = createSignal<IProduct[]>([]);
-
-  createEffect(() => {
-    const fetchProducts = async () => {
-      const res = await medusaClient.products.list();
-      setProducts(res.products);
-    };
-    fetchProducts();
-  });
+  const query = createQuery(() => ['product-list'], () => medusaClient.products.list())
 
   return (
     <>
@@ -42,7 +34,7 @@ function ProductList() {
               gap: '2rem',
             }}>
             <For
-              each={products()}
+              each={query.data?.products}
               children={(product) => <ProductItem product={product} />}
             />
           </Box>
