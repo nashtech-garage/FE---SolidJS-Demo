@@ -1,13 +1,15 @@
 import { useParams } from '@solidjs/router';
 import { createEffect, createSignal } from 'solid-js';
 import { Container, Box, Grid, IconButton, Button, Typography } from '@suid/material';
+import { createQuery } from '@tanstack/solid-query'
 
 import { Footer } from '../../layouts/Footer';
 import { medusaClient } from '../../utils';
+import { getProductPrice } from '../../utils/productHelper';
 
 const addProduct = async (cartId: string, product: any) => {
   const { cart } = await medusaClient.carts.lineItems.create(cartId, {
-    variant_id: product()?.variants[0].id,
+    variant_id: product?.variants[0].id,
     quantity: 1,
   });
   console.log(cart);
@@ -16,25 +18,20 @@ const addProduct = async (cartId: string, product: any) => {
 };
 
 function SingleProduct() {
-  const [productItem, setProductItem] = createSignal<any>();
   const [regionId, setRegionId] = createSignal<string>('');
   const params = useParams();
   const productId = params.productId;
   if (!productId) {
     return null;
   }
-  createEffect(() => {
-    const fetchSingleProduct = async () => {
-      const results = await medusaClient.products.retrieve(productId);
-      setProductItem(results.product);
-    };
+  const productQuery = createQuery(() => ['product-detail-' + productId], () => medusaClient.products.retrieve(productId))
 
+  createEffect(() => {
     const fetchRegions = async () => {
       const results = await medusaClient.regions.list();
       setRegionId(results.regions[1].id);
     };
 
-    fetchSingleProduct();
     fetchRegions();
   });
 
@@ -42,11 +39,11 @@ function SingleProduct() {
     const cartId = localStorage.getItem('cartId');
 
     if (cartId) {
-      addProduct(cartId, productItem);
+      addProduct(cartId, productQuery.data?.product);
     } else {
-      const { cart } = await medusaClient.carts.create({ region_id: regionId });
+      const { cart } = await medusaClient.carts.create({ region_id: regionId() });
       localStorage.setItem('cartId', cart.id);
-      addProduct(cart.id, productItem);
+      addProduct(cart.id, productQuery.data?.product);
     }
   };
 
@@ -59,8 +56,8 @@ function SingleProduct() {
               <Box
                 component='img'
                 style={{ width: '100%', position: 'relative' }}
-                alt={productItem()?.title}
-                src={productItem()?.thumbnail}
+                alt={productQuery.data?.title}
+                src={productQuery.data?.product?.thumbnail || ''}
               />
             </Box>
           </Grid>
@@ -74,10 +71,10 @@ function SingleProduct() {
                 flexDirection: 'column',
               }}>
               <Typography variant='h5' mb={2}>
-                {productItem()?.title}
+                {productQuery.data?.product?.title}
               </Typography>
-              <Typography mb={2}>&euro; {productItem()?.variants[0].prices[0].amount / 100}</Typography>
-              <Typography mb={2}>{productItem()?.description}</Typography>
+              <Typography mb={2}>{getProductPrice(productQuery.data?.product)}</Typography>
+              <Typography mb={2}>{productQuery.data?.product?.description}</Typography>
               <IconButton>
                 <Button onClick={handleAddToCart} variant='contained' color='primary'>
                   Add to cart
