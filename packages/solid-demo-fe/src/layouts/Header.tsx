@@ -1,5 +1,7 @@
 import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
+import SettingsIcon from '@suid/icons-material/Settings';
+import SearchIcon from '@suid/icons-material/Search';
 import { createEffect, createSignal, For } from 'solid-js';
 import { Link } from '@solidjs/router';
 
@@ -7,6 +9,7 @@ import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
 import { useCart } from '../components/CartProvider';
 import Logo from '../components/Logo';
+import { SubHeader } from './SubHeader';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
@@ -34,7 +37,8 @@ const Header = () => {
 
   return (
     <AppBar position='fixed' sx={{ backgroundColor: '#FFF' }}>
-      <Toolbar>
+      <Toolbar sx={{ flexDirection: 'column' }} disableGutters>
+        <SubHeader />
         <Grid container>
           <Grid item xs={3} md={3}>
             <LinkStyled href='/'>
@@ -75,6 +79,12 @@ const Header = () => {
           </Grid>
           <Grid item xs={9} md={3}>
             <CartContainer>
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+              <IconButton>
+                <SettingsIcon />
+              </IconButton>
               <IconButton>
                 <ShoppingCartIcon sx={{ color: '#777' }} />
               </IconButton>
