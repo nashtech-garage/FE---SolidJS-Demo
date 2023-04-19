@@ -3,9 +3,10 @@ import { render } from 'solid-js/web';
 import { Router } from '@solidjs/router';
 import { ThemeProvider } from '@suid/material';
 
-import 'normalize.css';
+import './assets/scss/root.scss';
 import App from './App';
 import { themeConfig } from './theme';
+import { SnackbarProvider } from './providers';
 
 const root = document.getElementById('root');
 
@@ -18,9 +19,11 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(
   () => (
     <ThemeProvider theme={themeConfig}>
-      <Router>
-        <App />
-      </Router>
+      <SnackbarProvider>
+        <Router>
+          <App />
+        </Router>
+      </SnackbarProvider>
     </ThemeProvider>
   ),
   root!
