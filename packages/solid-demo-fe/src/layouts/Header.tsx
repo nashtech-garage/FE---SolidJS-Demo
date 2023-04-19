@@ -1,6 +1,7 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Link, Typography, Menu, MenuItem } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Typography, Menu, MenuItem, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import { createEffect, createSignal, For } from 'solid-js';
+import { Link } from '@solidjs/router';
 
 import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
@@ -10,8 +11,8 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
   const [collections, setCollections] = createSignal<ICollection[]>([]);
-  const { cart } = useCart()
-  
+  const { cart } = useCart();
+
   const handlePopoverOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget as HTMLElement);
     setOpen(true);
@@ -31,36 +32,34 @@ const Header = () => {
   });
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Container sx={{ flexGrow: 1 }}>
       <AppBar position='fixed' color='primary'>
-        <Toolbar>
+        <ToolbarStyled>
           <Grid container>
-            <Grid item xs={3} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <Typography
-                sx={{ fontSize: '1.3rem', color: '#fff', fontWeight: 'bold', border: '1px solid #fff', p: 1 }}>
-                NT Store
-              </Typography>
+            <Grid item xs={3} md={3}>
+              <LogoTypography>
+                <span>NT</span>
+                <span>Kart</span>
+              </LogoTypography>
             </Grid>
             <Grid
               item
               xs={0}
               md={6}
               sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <Link href='/' sx={{ color: '#fff', textTransform: 'uppercase' }}>
-                Home
-              </Link>
-              <Link href='/products' sx={{ color: '#fff', textTransform: 'uppercase' }}>
-                Products
-              </Link>
-              <Link
+              <LinkStyled href='/'>Home</LinkStyled>
+              <LinkStyled href='/products'>Products</LinkStyled>
+              <LinkStyled href='#'>Pages</LinkStyled>
+              <LinkStyled href='#'>Blogs</LinkStyled>
+              <LinkStyled
                 id='collection-btn'
-                sx={{ color: '#fff', textTransform: 'uppercase' }}
                 aria-controls={open() ? 'basic-menu' : undefined}
                 aria-expanded={open() ? 'true' : undefined}
                 aria-haspopup='true'
-                onClick={handlePopoverOpen}>
+                onClick={handlePopoverOpen}
+                href='#'>
                 Collections
-              </Link>
+              </LinkStyled>
               <Menu
                 id='collection-menu'
                 open={open()}
@@ -76,18 +75,55 @@ const Header = () => {
               </Menu>
             </Grid>
             <Grid item xs={9} md={3}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <CartContainer>
                 <IconButton>
-                  <ShoppingCartIcon sx={{ color: '#fff' }} />
+                  <ShoppingCartIcon sx={{ color: '#777' }} />
                 </IconButton>
-                <Box as='p'>{cart().items.length}</Box>
-              </Box>
+                <Box as='span' color='#777'>
+                  {cart().items.length}
+                </Box>
+              </CartContainer>
             </Grid>
           </Grid>
-        </Toolbar>
+        </ToolbarStyled>
       </AppBar>
-    </Box>
+    </Container>
   );
 };
+
+const Container = styled(Box)({});
+
+const LogoTypography = styled(Typography)({
+  fontSize: '1.3rem',
+  color: '#777',
+  fontWeight: 'bold',
+  padding: '1rem',
+
+  'span:nth-child(1)': {
+    color: '#ff4c3b',
+  },
+
+  'span:nth-child(2)': {
+    color: '#000',
+  },
+});
+
+const ToolbarStyled = styled(Toolbar)({
+  backgroundColor: '#F6F6F6',
+  color: '#F6F6F6',
+});
+
+const LinkStyled = styled(Link)({
+  color: '#777',
+  textDecoration: 'none',
+  fontSize: 16,
+});
+
+const CartContainer = styled(Box)({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  height: '100%'
+});
 
 export default Header;
