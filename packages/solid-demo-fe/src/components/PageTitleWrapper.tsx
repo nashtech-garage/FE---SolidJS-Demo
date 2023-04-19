@@ -1,10 +1,11 @@
 import { Box, Container, Typography, styled } from '@suid/material';
+import { Component } from 'solid-js';
 
-type PageTitleWrapper = {
+interface PageTitleWrapperProps {
   title?: string;
-};
+}
 
-function PageTitleWrapper(props: PageTitleWrapper) {
+const PageTitleWrapper: Component<PageTitleWrapperProps> = (props) => {
   return (
     <MainContainer>
       <Container>
@@ -14,7 +15,7 @@ function PageTitleWrapper(props: PageTitleWrapper) {
       </Container>
     </MainContainer>
   );
-}
+};
 
 const MainContainer = styled(Box)({
   backgroundColor: '#f8f8f8',
@@ -22,4 +23,4 @@ const MainContainer = styled(Box)({
   marginBottom: 32,
 });
 
-export default PageTitleWrapper;
+export { PageTitleWrapper };

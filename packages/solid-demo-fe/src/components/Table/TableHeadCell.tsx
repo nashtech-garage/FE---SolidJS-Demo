@@ -1,15 +1,17 @@
-import { Typography, TableCell } from "@suid/material"
+import { Typography, TableCell } from '@suid/material';
 
 type TableCellProps = {
-  children: any
-}
+  children: any;
+};
 
 function TableHeadCell(props: TableCellProps) {
   return (
     <TableCell>
-      <Typography color="#222" textTransform="uppercase">{props.children}</Typography>
+      <Typography color='#222' textTransform='uppercase'>
+        {props.children}
+      </Typography>
     </TableCell>
-  )
+  );
 }
 
-export default TableHeadCell
+export { TableHeadCell };

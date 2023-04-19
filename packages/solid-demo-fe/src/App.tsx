@@ -1,10 +1,11 @@
 import { lazy } from 'solid-js';
 import { Routes, Route } from '@solidjs/router';
-import { MainLayout } from './layouts';
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
-import { CartProvider } from './components/CartProvider';
 import { ThemeProvider } from '@suid/material';
+
+import { MainLayout } from './layouts';
 import { theme } from './utils/theme';
+import { CartProvider } from './providers';
 
 
 const Products = lazy(() => import('./pages/products'));

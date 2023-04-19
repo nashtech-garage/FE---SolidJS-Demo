@@ -1,17 +1,18 @@
+import { Component } from 'solid-js';
 import { Typography, styled } from '@suid/material';
 
 type LogoProps = {
-  class?: string
-}
+  class?: string;
+};
 
-function Logo(props: LogoProps) {
+const Logo: Component<LogoProps> = (props) => {
   return (
     <LogoTypography class={props.class}>
       <span>NT</span>
       <span>Kart</span>
     </LogoTypography>
   );
-}
+};
 
 const LogoTypography = styled(Typography)({
   fontSize: '1.3rem',
@@ -28,4 +29,4 @@ const LogoTypography = styled(Typography)({
   },
 });
 
-export default Logo;
+export { Logo };

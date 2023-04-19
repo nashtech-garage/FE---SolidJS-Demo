@@ -1,13 +1,12 @@
+import { For, createEffect, createSignal } from 'solid-js';
 import { useParams } from '@solidjs/router';
 import { Box, Grid, Button, Typography, styled, Container, Divider, ButtonGroup } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
 
-import { Footer } from '../../layouts/Footer';
+import { useCart } from '../../contexts';
 import { medusaClient } from '../../utils';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
-import { useCart } from '../../components/CartProvider';
-import { For, createEffect, createSignal } from 'solid-js';
-import PageTitleWrapper from '../../components/PageTitleWrapper';
+import { PageTitleWrapper } from '../../components';
 
 function SingleProduct() {
   const params = useParams();
@@ -15,10 +14,12 @@ function SingleProduct() {
   if (!productId) {
     return null;
   }
+
   const productQuery = createQuery(
     () => ['product-detail-' + productId],
     () => medusaClient.products.retrieve(productId)
   );
+
   const { updateCart } = useCart();
   const [variant, setVariant] = createSignal<any>();
   const [quantity, setQuantity] = createSignal(1);
@@ -56,83 +57,80 @@ function SingleProduct() {
   });
 
   return (
-    <>
+    <Container>
       <PageTitleWrapper title={productQuery.data?.product?.title} />
-      <Container>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <Box>
-              <Box
-                component='img'
-                style={{ width: '100%', position: 'relative' }}
-                alt={productQuery.data?.title}
-                src={productQuery.data?.product?.thumbnail || ''}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={8}>
-            <Box sx={{ marginTop: '2rem' }}>
-              <Typography variant='h6' color='#222' textTransform='uppercase'>
-                {productQuery.data?.product?.title}
-              </Typography>
-              <Box>
-                <Typography color='#777' variant='caption' sx={{ textDecoration: 'line-through' }} fontSize='1rem'>
-                  {getOriginalPrice()}
-                </Typography>
-                <Typography variant='caption' color='#ff4c3b' fontSize='1rem'>
-                  &nbsp;10% Off
-                </Typography>
-              </Box>
-              <Typography fontSize={'1.5rem'} color='#222'>
-                {getProductPrice(variant())}
-              </Typography>
-              <Divider />
-              <QuantityBox>
-                <SectionTitle mb={1}>Select Size</SectionTitle>
-                <ButtonSizeGroup>
-                  <For
-                    each={productQuery.data?.product.variants}
-                    children={(item) => (
-                      <SizeButton
-                        onClick={() => setVariant(item)}
-                        class={isSizeButtonActive(item.id) ? 'active' : ''}
-                        variant='outlined'
-                        color='info'>
-                        {item.title}
-                      </SizeButton>
-                    )}
-                  />
-                </ButtonSizeGroup>
-                <SectionTitle marginY={1}>Quantity</SectionTitle>
-                <ButtonGroup>
-                  <Button onClick={decrement} color='info'>
-                    -
-                  </Button>
-                  <QuantityButton disabled>{quantity()}</QuantityButton>
-                  <Button onClick={increment} color='info'>
-                    +
-                  </Button>
-                </ButtonGroup>
-              </QuantityBox>
-              <Box sx={{ marginBottom: 3 }}>
-                <Button onClick={handleAddToCart} variant='contained' color='primary' sx={{ marginRight: 1 }}>
-                  Add to cart
-                </Button>
-                <Button variant='contained' color='primary'>
-                  Buy Now
-                </Button>
-              </Box>
-              <Divider />
-              <SectionTitle mt={1}>Product Details</SectionTitle>
-              <Typography color='#777' variant='caption'>
-                {productQuery.data?.product?.description}
-              </Typography>
-            </Box>
-          </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <Box>
+            <Box
+              component='img'
+              style={{ width: '100%', position: 'relative' }}
+              alt={productQuery.data?.product?.title}
+              src={productQuery.data?.product?.thumbnail || ''}
+            />
+          </Box>
         </Grid>
-      </Container>
-      <Footer />
-    </>
+        <Grid item xs={8}>
+          <Box sx={{ marginTop: '2rem' }}>
+            <Typography variant='h6' color='#222' textTransform='uppercase'>
+              {productQuery.data?.product?.title}
+            </Typography>
+            <Box>
+              <Typography color='#777' variant='caption' sx={{ textDecoration: 'line-through' }} fontSize='1rem'>
+                {getOriginalPrice()}
+              </Typography>
+              <Typography variant='caption' color='#ff4c3b' fontSize='1rem'>
+                &nbsp;10% Off
+              </Typography>
+            </Box>
+            <Typography fontSize={'1.5rem'} color='#222'>
+              {getProductPrice(variant())}
+            </Typography>
+            <Divider />
+            <QuantityBox>
+              <SectionTitle mb={1}>Select Size</SectionTitle>
+              <ButtonSizeGroup>
+                <For
+                  each={productQuery.data?.product.variants}
+                  children={(item) => (
+                    <SizeButton
+                      onClick={() => setVariant(item)}
+                      class={isSizeButtonActive(item.id) ? 'active' : ''}
+                      variant='outlined'
+                      color='info'>
+                      {item.title}
+                    </SizeButton>
+                  )}
+                />
+              </ButtonSizeGroup>
+              <SectionTitle marginY={1}>Quantity</SectionTitle>
+              <ButtonGroup>
+                <Button onClick={decrement} color='info'>
+                  -
+                </Button>
+                <QuantityButton disabled>{quantity()}</QuantityButton>
+                <Button onClick={increment} color='info'>
+                  +
+                </Button>
+              </ButtonGroup>
+            </QuantityBox>
+            <Box sx={{ marginBottom: 3 }}>
+              <Button onClick={handleAddToCart} variant='contained' color='primary' sx={{ marginRight: 1 }}>
+                Add to cart
+              </Button>
+              <Button variant='contained' color='primary'>
+                Buy Now
+              </Button>
+            </Box>
+            <Divider />
+            <SectionTitle mt={1}>Product Details</SectionTitle>
+            <Typography color='#777' variant='caption'>
+              {productQuery.data?.product?.description}
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

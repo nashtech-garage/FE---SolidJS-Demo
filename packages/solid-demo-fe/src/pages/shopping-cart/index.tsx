@@ -1,8 +1,8 @@
-import { Box, Button, Container, Table, TableBody, TableHead, TableRow, TableCell } from '@suid/material';
-import PageTitleWrapper from '../../components/PageTitleWrapper';
-import { useCart } from '../../components/CartProvider';
 import { For, createEffect } from 'solid-js';
-import TableHeadCell from '../../components/Table/TableHeadCell';
+import { Box, Button, Container, Table, TableBody, TableHead, TableRow, TableCell } from '@suid/material';
+
+import { PageTitleWrapper, TableHeadCell } from '../../components';
+import { useCart } from '../../contexts';
 
 function ShoppingCart() {
   const { cart } = useCart();

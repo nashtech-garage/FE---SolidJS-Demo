@@ -1,15 +1,14 @@
 import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
-import SettingsIcon from '@suid/icons-material/Settings';
-import SearchIcon from '@suid/icons-material/Search';
+import { Settings as SettingsIcon, Search as SearchIcon } from '@suid/icons-material';
 import { createEffect, createSignal, For } from 'solid-js';
 import { Link } from '@solidjs/router';
 
 import { medusaClient } from '../utils/medusaClient';
+import { useCart } from '../contexts';
 import { ICollection } from '../types';
-import { useCart } from '../components/CartProvider';
-import Logo from '../components/Logo';
 import { SubHeader } from './SubHeader';
+import { Logo } from '../components';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
@@ -113,4 +112,4 @@ const CartContainer = styled(Box)({
   height: '100%',
 });
 
-export default Header;
+export { Header };
