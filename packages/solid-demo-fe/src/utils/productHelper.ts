@@ -36,6 +36,5 @@ export async function addProduct(product: any, regionId: string, onCartChange: (
     } catch (error) {
       console.log('Add product error:', error);
     }
-  } else {
   }
 }

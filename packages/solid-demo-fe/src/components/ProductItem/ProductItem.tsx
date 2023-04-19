@@ -3,7 +3,8 @@ import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
 import { splitProps, createSignal } from 'solid-js';
 import { IProduct } from '../../types';
-import { getProductPrice } from '../../utils/productHelper';
+import { addProduct, getProductPrice } from '../../utils/productHelper';
+import { useCart } from '../CartProvider';
 
 interface ProductItemProps {
   product: IProduct;
@@ -14,9 +15,13 @@ const StarStyled = () => <Star sx={{ fontSize: '0.8rem', color: '#EDB867' }} />;
 function ProductItem(props: ProductItemProps) {
   const [hovering, setHovering] = createSignal(false);
   const [{ product }] = splitProps(props, ['product']);
+  const { regionId, updateCart } = useCart()
   const { title, thumbnail } = product;
 
-  const addToCart = () => {};
+  const addToCart = (event: MouseEvent) => {
+    event.preventDefault()
+    addProduct(product, regionId(), updateCart)
+  };
 
   const addToFavorite = () => {};
 

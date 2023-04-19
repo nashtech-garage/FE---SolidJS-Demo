@@ -1,4 +1,4 @@
-import { createSignal, createContext, onMount, useContext } from 'solid-js';
+import { createSignal, createContext, onMount, useContext, Accessor } from 'solid-js';
 import { medusaClient } from '../utils/medusaClient';
 
 type Cart = {
@@ -7,17 +7,19 @@ type Cart = {
 };
 
 type CartStoreType = {
-  cart: any;
+  cart: Accessor<Cart>;
+  regionId: Accessor<string>
   updateCart: (newCart: Cart) => void;
 };
 
-const CartContext = createContext<CartStoreType | undefined>(undefined);
+const CartContext = createContext<CartStoreType | undefined>();
 
 export function CartProvider(props: { children: any }) {
   const [cart, setCart] = createSignal<Cart>({
     id: undefined,
     items: [],
   });
+  const [regionId, setRegionId] = createSignal<string>('')
 
   onMount(() => {
     const getCart = async () => {
@@ -31,6 +33,12 @@ export function CartProvider(props: { children: any }) {
       }
     };
 
+    const fetchRegions = async () => {
+      const results = await medusaClient.regions.list();
+      setRegionId(results.regions[1].id);
+    };
+
+    fetchRegions();
     getCart();
   });
 
@@ -38,6 +46,7 @@ export function CartProvider(props: { children: any }) {
     <CartContext.Provider
       value={{
         cart,
+        regionId,
         updateCart: setCart,
       }}>
       {props.children}

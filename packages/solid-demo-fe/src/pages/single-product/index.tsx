@@ -1,5 +1,4 @@
 import { useParams } from '@solidjs/router';
-import { createEffect, createSignal } from 'solid-js';
 import { Container, Box, Grid, IconButton, Button, Typography } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
 
@@ -9,7 +8,6 @@ import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { useCart } from '../../components/CartProvider';
 
 function SingleProduct() {
-  const [regionId, setRegionId] = createSignal<string>('');
   const params = useParams();
   const productId = params.productId;
   if (!productId) {
@@ -19,16 +17,7 @@ function SingleProduct() {
     () => ['product-detail-' + productId],
     () => medusaClient.products.retrieve(productId)
   );
-  const { updateCart } = useCart();
-
-  createEffect(() => {
-    const fetchRegions = async () => {
-      const results = await medusaClient.regions.list();
-      setRegionId(results.regions[1].id);
-    };
-
-    fetchRegions();
-  });
+  const { regionId, updateCart } = useCart();
 
   const handleAddToCart = async () => {
     addProduct(productQuery.data?.product, regionId(), updateCart)
