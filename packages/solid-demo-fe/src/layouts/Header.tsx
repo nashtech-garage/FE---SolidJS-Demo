@@ -1,4 +1,4 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Typography, Menu, MenuItem, styled } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import { createEffect, createSignal, For } from 'solid-js';
 import { Link } from '@solidjs/router';
@@ -6,6 +6,7 @@ import { Link } from '@solidjs/router';
 import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
 import { useCart } from '../components/CartProvider';
+import Logo from '../components/Logo';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
@@ -32,86 +33,61 @@ const Header = () => {
   });
 
   return (
-    <Container sx={{ flexGrow: 1 }}>
-      <AppBar position='fixed' color='primary'>
-        <ToolbarStyled>
-          <Grid container>
-            <Grid item xs={3} md={3}>
-              <LogoTypography>
-                <span>NT</span>
-                <span>Kart</span>
-              </LogoTypography>
-            </Grid>
-            <Grid
-              item
-              xs={0}
-              md={6}
-              sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <LinkStyled href='/'>Home</LinkStyled>
-              <LinkStyled href='/products'>Products</LinkStyled>
-              <LinkStyled href='#'>Pages</LinkStyled>
-              <LinkStyled href='#'>Blogs</LinkStyled>
-              <LinkStyled
-                id='collection-btn'
-                aria-controls={open() ? 'basic-menu' : undefined}
-                aria-expanded={open() ? 'true' : undefined}
-                aria-haspopup='true'
-                onClick={handlePopoverOpen}
-                href='#'>
-                Collections
-              </LinkStyled>
-              <Menu
-                id='collection-menu'
-                open={open()}
-                anchorEl={anchorEl()}
-                MenuListProps={{
-                  'aria-labelledby': 'collection-btn',
-                }}
-                onClose={handlePopoverClose}>
-                <For
-                  each={collections()}
-                  children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
-                />
-              </Menu>
-            </Grid>
-            <Grid item xs={9} md={3}>
-              <CartContainer>
-                <IconButton>
-                  <ShoppingCartIcon sx={{ color: '#777' }} />
-                </IconButton>
-                <Box as='span' color='#777'>
-                  {cart().items.length}
-                </Box>
-              </CartContainer>
-            </Grid>
+    <AppBar position='fixed' sx={{ backgroundColor: '#FFF' }}>
+      <Toolbar>
+        <Grid container>
+          <Grid item xs={3} md={3}>
+            <LinkStyled href='/'>
+              <Logo />
+            </LinkStyled>
           </Grid>
-        </ToolbarStyled>
-      </AppBar>
-    </Container>
+          <Grid
+            item
+            xs={0}
+            md={6}
+            sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
+            <LinkStyled href='/'>Home</LinkStyled>
+            <LinkStyled href='/products'>Products</LinkStyled>
+            <LinkStyled href='#'>Pages</LinkStyled>
+            <LinkStyled href='#'>Blogs</LinkStyled>
+            <LinkStyled
+              id='collection-btn'
+              aria-controls={open() ? 'basic-menu' : undefined}
+              aria-expanded={open() ? 'true' : undefined}
+              aria-haspopup='true'
+              onClick={handlePopoverOpen}
+              href='#'>
+              Collections
+            </LinkStyled>
+            <Menu
+              id='collection-menu'
+              open={open()}
+              anchorEl={anchorEl()}
+              MenuListProps={{
+                'aria-labelledby': 'collection-btn',
+              }}
+              onClose={handlePopoverClose}>
+              <For
+                each={collections()}
+                children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
+              />
+            </Menu>
+          </Grid>
+          <Grid item xs={9} md={3}>
+            <CartContainer>
+              <IconButton>
+                <ShoppingCartIcon sx={{ color: '#777' }} />
+              </IconButton>
+              <Box as='span' color='#777'>
+                {cart().items.length}
+              </Box>
+            </CartContainer>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 };
-
-const Container = styled(Box)({});
-
-const LogoTypography = styled(Typography)({
-  fontSize: '1.3rem',
-  color: '#777',
-  fontWeight: 'bold',
-  padding: '1rem',
-
-  'span:nth-child(1)': {
-    color: '#ff4c3b',
-  },
-
-  'span:nth-child(2)': {
-    color: '#000',
-  },
-});
-
-const ToolbarStyled = styled(Toolbar)({
-  backgroundColor: '#F6F6F6',
-  color: '#F6F6F6',
-});
 
 const LinkStyled = styled(Link)({
   color: '#777',
@@ -123,7 +99,7 @@ const CartContainer = styled(Box)({
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
-  height: '100%'
+  height: '100%',
 });
 
 export default Header;
