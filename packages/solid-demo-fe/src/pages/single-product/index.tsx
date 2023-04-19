@@ -7,6 +7,7 @@ import { medusaClient } from '../../utils';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { useCart } from '../../components/CartProvider';
 import { For, createEffect, createSignal } from 'solid-js';
+import PageTitleWrapper from '../../components/PageTitleWrapper';
 
 function SingleProduct() {
   const params = useParams();
@@ -56,13 +57,7 @@ function SingleProduct() {
 
   return (
     <>
-      <ProductTitleWrapper>
-        <Container>
-          <Typography variant='h5' color='#777' fontWeight='bold'>
-            {productQuery.data?.product?.title}
-          </Typography>
-        </Container>
-      </ProductTitleWrapper>
+      <PageTitleWrapper title={productQuery.data?.product?.title} />
       <Container>
         <Grid container spacing={2}>
           <Grid item xs={4}>
@@ -108,9 +103,7 @@ function SingleProduct() {
                     )}
                   />
                 </ButtonSizeGroup>
-                <SectionTitle marginY={1}>
-                  Quantity
-                </SectionTitle>
+                <SectionTitle marginY={1}>Quantity</SectionTitle>
                 <ButtonGroup>
                   <Button onClick={decrement} color='info'>
                     -
@@ -131,7 +124,9 @@ function SingleProduct() {
               </Box>
               <Divider />
               <SectionTitle mt={1}>Product Details</SectionTitle>
-              <Typography color='#777' variant='caption'>{productQuery.data?.product?.description}</Typography>
+              <Typography color='#777' variant='caption'>
+                {productQuery.data?.product?.description}
+              </Typography>
             </Box>
           </Grid>
         </Grid>
@@ -167,7 +162,7 @@ const ButtonSizeGroup = styled(Box)({
 const SizeButton = styled(Button)({
   '&.active': {
     backgroundColor: '#c2b9b9',
-    color: '#FFF'
+    color: '#FFF',
   },
 });
 

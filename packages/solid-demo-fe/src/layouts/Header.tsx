@@ -1,4 +1,4 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, styled } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import SettingsIcon from '@suid/icons-material/Settings';
 import SearchIcon from '@suid/icons-material/Search';
@@ -77,7 +77,7 @@ const Header = () => {
               />
             </Menu>
           </Grid>
-          <Grid item xs={9} md={3}>
+          <Grid item xs={9} md={3} pr={2}>
             <CartContainer>
               <IconButton>
                 <SearchIcon />
@@ -85,12 +85,13 @@ const Header = () => {
               <IconButton>
                 <SettingsIcon />
               </IconButton>
-              <IconButton>
-                <ShoppingCartIcon sx={{ color: '#777' }} />
-              </IconButton>
-              <Box as='span' color='#777'>
-                {cart().items.length}
-              </Box>
+              <Link href='/shopping-cart'>
+                <IconButton>
+                  <Badge badgeContent={cart().items.length} color='primary'>
+                    <ShoppingCartIcon sx={{ color: '#777' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
             </CartContainer>
           </Grid>
         </Grid>
