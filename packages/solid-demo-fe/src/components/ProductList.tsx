@@ -1,20 +1,12 @@
 //ProductList.jsx
-import { createEffect, createSignal, For } from 'solid-js';
-import { A } from '@solidjs/router';
-import { Box, Typography, Link } from '@suid/material';
+import { Box, Typography } from '@suid/material';
 import { medusaClient } from '../utils/medusaClient';
-import { IProduct } from '../types';
+import ProductItem from './ProductItem/ProductItem';
+import { createQuery} from '@tanstack/solid-query'
+import { For } from 'solid-js';
 
 function ProductList() {
-  const [products, setProducts] = createSignal<IProduct[]>([]);
-
-  createEffect(() => {
-    const fetchProducts = async () => {
-      const res = await medusaClient.products.list();
-      setProducts(res.products);
-    };
-    fetchProducts();
-  });
+  const query = createQuery(() => ['product-list'], () => medusaClient.products.list())
 
   return (
     <>
@@ -42,44 +34,9 @@ function ProductList() {
               gap: '2rem',
             }}>
             <For
-              each={products()}
-              children={(product) => (
-                <Box
-                  component='div'
-                  sx={{
-                    backgroundColor: 'rgb(231, 231, 231)',
-                    height: '350px',
-                    padding: '0.5rem',
-                  }}>
-                  <Box component='div' sx={{ height: '12rem' }}>
-                    <Box
-                      component='img'
-                      src={product?.thumbnail}
-                      sx={{
-                        height: '12rem',
-                        width: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </Box>
-                  <Typography
-                    sx={{
-                      padding: '1rem 0',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                    }}>
-                    {product?.title}
-                  </Typography>
-                  <Typography sx={{ textAlign: 'center' }}>
-                    &euro; {product?.variants[0]?.prices[0]?.amount / 100}
-                  </Typography>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Link underline='always'>
-                      <A href={`/products/${product.id}`}>See product</A>
-                    </Link>
-                  </Box>
-                </Box>
-              )}></For>
+              each={query.data?.products}
+              children={(product) => <ProductItem product={product} />}
+            />
           </Box>
         </Box>
       </Box>

@@ -4,6 +4,7 @@ import { A } from '@solidjs/router';
 import { Box, Typography, Link, ToggleButton, ToggleButtonGroup } from '@suid/material';
 import { medusaClient } from '../utils/medusaClient';
 import { IProductType, IProduct } from '../types';
+import { ProductItem } from './ProductItem';
 
 function FeaturedProducts() {
   const [products, setProducts] = createSignal<IProduct[]>([]);
@@ -87,43 +88,7 @@ function FeaturedProducts() {
                 }}>
                 <For
                   each={products()}
-                  children={(product: IProduct) => (
-                    <Box
-                      component='div'
-                      sx={{
-                        backgroundColor: 'rgb(231, 231, 231)',
-                        height: '400px',
-                        padding: '0.5rem',
-                      }}>
-                      <Box component='div' sx={{ height: '12rem' }}>
-                        <Box
-                          component='img'
-                          src={product?.thumbnail}
-                          sx={{
-                            height: '12rem',
-                            width: '100%',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      </Box>
-                      <Typography
-                        sx={{
-                          padding: '1rem 0',
-                          textAlign: 'center',
-                          fontWeight: '600',
-                        }}>
-                        {product?.title}
-                      </Typography>
-                      <Typography sx={{ textAlign: 'center' }}>
-                        &euro; {product?.variants[0]?.prices[0]?.amount / 100}
-                      </Typography>
-                      <Box sx={{ textAlign: 'center' }}>
-                        <Link underline='always'>
-                          <A href={`/products/${product.id}`}>See product</A>
-                        </Link>
-                      </Box>
-                    </Box>
-                  )}
+                  children={(product: IProduct) => (<ProductItem product={product} />)}
                 />
               </Box>
             }

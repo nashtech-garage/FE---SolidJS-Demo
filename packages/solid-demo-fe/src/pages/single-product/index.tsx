@@ -1,88 +1,132 @@
 import { useParams } from '@solidjs/router';
-import { createEffect, createSignal } from 'solid-js';
-import { Container, Box, Grid, IconButton, Button, Typography } from '@suid/material';
+import { Box, Grid, Button, Typography, styled, Container, Divider, ButtonGroup } from '@suid/material';
+import { createQuery } from '@tanstack/solid-query';
 
 import { Footer } from '../../layouts/Footer';
 import { medusaClient } from '../../utils';
-
-const addProduct = async (cartId: string, product: any) => {
-  const { cart } = await medusaClient.carts.lineItems.create(cartId, {
-    variant_id: product()?.variants[0].id,
-    quantity: 1,
-  });
-  console.log(cart);
-  localStorage.setItem('cartCount', cart.items.length);
-  setTimeout(() => window.location.reload(), 5000);
-};
+import { addProduct, getProductPrice } from '../../utils/productHelper';
+import { useCart } from '../../components/CartProvider';
+import { For, createEffect, createSignal } from 'solid-js';
+import PageTitleWrapper from '../../components/PageTitleWrapper';
 
 function SingleProduct() {
-  const [productItem, setProductItem] = createSignal<any>();
-  const [regionId, setRegionId] = createSignal<string>('');
   const params = useParams();
   const productId = params.productId;
   if (!productId) {
     return null;
   }
-  createEffect(() => {
-    const fetchSingleProduct = async () => {
-      const results = await medusaClient.products.retrieve(productId);
-      setProductItem(results.product);
-    };
-
-    const fetchRegions = async () => {
-      const results = await medusaClient.regions.list();
-      setRegionId(results.regions[1].id);
-    };
-
-    fetchSingleProduct();
-    fetchRegions();
-  });
+  const productQuery = createQuery(
+    () => ['product-detail-' + productId],
+    () => medusaClient.products.retrieve(productId)
+  );
+  const { updateCart } = useCart();
+  const [variant, setVariant] = createSignal<any>();
+  const [quantity, setQuantity] = createSignal(1);
 
   const handleAddToCart = async () => {
-    const cartId = localStorage.getItem('cartId');
-
-    if (cartId) {
-      addProduct(cartId, productItem);
-    } else {
-      const { cart } = await medusaClient.carts.create({ region_id: regionId });
-      localStorage.setItem('cartId', cart.id);
-      addProduct(cart.id, productItem);
+    if (variant()) {
+      addProduct(variant().id, quantity(), updateCart);
     }
   };
 
+  const isSizeButtonActive = (variantId: string) => {
+    if (variant() && variant()?.id === variantId) return true;
+    return false;
+  };
+
+  const decrement = () => {
+    if (quantity() === 1) return;
+    setQuantity(quantity() - 1);
+  };
+
+  const increment = () => setQuantity(quantity() + 1);
+
+  const getOriginalPrice = () => {
+    if (!variant()) return '';
+
+    const price = variant().prices[1].amount / 100;
+    return '$' + (price * 0.1111 + price).toFixed(2);
+  };
+
+  createEffect(() => {
+    const variants = productQuery.data?.product.variants;
+    if (variants && variants.length > 0) {
+      setVariant(variants[0]);
+    }
+  });
+
   return (
     <>
-      <Container maxWidth='sm' sx={{ marginBlockStart: 8, padding: 3 }}>
+      <PageTitleWrapper title={productQuery.data?.product?.title} />
+      <Container>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Box>
               <Box
                 component='img'
                 style={{ width: '100%', position: 'relative' }}
-                alt={productItem()?.title}
-                src={productItem()?.thumbnail}
+                alt={productQuery.data?.title}
+                src={productQuery.data?.product?.thumbnail || ''}
               />
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <Box
-              sx={{
-                marginTop: '2rem',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                flexDirection: 'column',
-              }}>
-              <Typography variant='h5' mb={2}>
-                {productItem()?.title}
+          <Grid item xs={8}>
+            <Box sx={{ marginTop: '2rem' }}>
+              <Typography variant='h6' color='#222' textTransform='uppercase'>
+                {productQuery.data?.product?.title}
               </Typography>
-              <Typography mb={2}>&euro; {productItem()?.variants[0].prices[0].amount / 100}</Typography>
-              <Typography mb={2}>{productItem()?.description}</Typography>
-              <IconButton>
-                <Button onClick={handleAddToCart} variant='contained' color='primary'>
+              <Box>
+                <Typography color='#777' variant='caption' sx={{ textDecoration: 'line-through' }} fontSize='1rem'>
+                  {getOriginalPrice()}
+                </Typography>
+                <Typography variant='caption' color='#ff4c3b' fontSize='1rem'>
+                  &nbsp;10% Off
+                </Typography>
+              </Box>
+              <Typography fontSize={'1.5rem'} color='#222'>
+                {getProductPrice(variant())}
+              </Typography>
+              <Divider />
+              <QuantityBox>
+                <SectionTitle mb={1}>Select Size</SectionTitle>
+                <ButtonSizeGroup>
+                  <For
+                    each={productQuery.data?.product.variants}
+                    children={(item) => (
+                      <SizeButton
+                        onClick={() => setVariant(item)}
+                        class={isSizeButtonActive(item.id) ? 'active' : ''}
+                        variant='outlined'
+                        color='info'>
+                        {item.title}
+                      </SizeButton>
+                    )}
+                  />
+                </ButtonSizeGroup>
+                <SectionTitle marginY={1}>Quantity</SectionTitle>
+                <ButtonGroup>
+                  <Button onClick={decrement} color='info'>
+                    -
+                  </Button>
+                  <QuantityButton disabled>{quantity()}</QuantityButton>
+                  <Button onClick={increment} color='info'>
+                    +
+                  </Button>
+                </ButtonGroup>
+              </QuantityBox>
+              <Box sx={{ marginBottom: 3 }}>
+                <Button onClick={handleAddToCart} variant='contained' color='primary' sx={{ marginRight: 1 }}>
                   Add to cart
                 </Button>
-              </IconButton>
+                <Button variant='contained' color='primary'>
+                  Buy Now
+                </Button>
+              </Box>
+              <Divider />
+              <SectionTitle mt={1}>Product Details</SectionTitle>
+              <Typography color='#777' variant='caption'>
+                {productQuery.data?.product?.description}
+              </Typography>
             </Box>
           </Grid>
         </Grid>
@@ -91,5 +135,47 @@ function SingleProduct() {
     </>
   );
 }
+
+const ProductTitleWrapper = styled(Box)({
+  backgroundColor: '#f8f8f8',
+  padding: 32,
+  marginBottom: 32,
+});
+
+const QuantityBox = styled(Box)({
+  paddingTop: 16,
+  paddingBottom: 20,
+});
+
+const ButtonSizeGroup = styled(Box)({
+  display: 'inline-flex',
+  gap: 8,
+
+  '& > button': {
+    minWidth: 'unset',
+    minHeight: 'unset',
+    width: '40px',
+    height: '40px',
+  },
+});
+
+const SizeButton = styled(Button)({
+  '&.active': {
+    backgroundColor: '#c2b9b9',
+    color: '#FFF',
+  },
+});
+
+const QuantityButton = styled(Button)({
+  '&.Mui-disabled': {
+    color: '#000',
+  },
+});
+
+const SectionTitle = styled(Typography)({
+  color: '#222',
+  fontSize: 13,
+  fontWeight: '700',
+});
 
 export default SingleProduct;

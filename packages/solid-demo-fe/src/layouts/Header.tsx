@@ -1,20 +1,21 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Link, Menu, MenuItem } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import SettingsIcon from '@suid/icons-material/Settings';
 import SearchIcon from '@suid/icons-material/Search';
 import { createEffect, createSignal, For } from 'solid-js';
+import { Link } from '@solidjs/router';
 
 import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
+import { useCart } from '../components/CartProvider';
+import Logo from '../components/Logo';
 import { SubHeader } from './SubHeader';
-import logoImg from '../assets/logo.png';
-import { textColor } from '../theme';
 
 const Header = () => {
-  const cartCount = localStorage.getItem('cartCount') ?? 0;
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
   const [collections, setCollections] = createSignal<ICollection[]>([]);
+  const { cart } = useCart();
 
   const handlePopoverOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget as HTMLElement);
@@ -35,67 +36,81 @@ const Header = () => {
   });
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='fixed' sx={{ boxShadow: 'none', backgroundColor: '#fff' }}>
-        <Toolbar sx={{ flexDirection: 'column' }} disableGutters>
-          <SubHeader />
-          <Grid container sx={{ paddingInline: 4 }}>
-            <Grid item xs={3} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-              <img alt='logo' src={logoImg} height={56} />
-            </Grid>
-            <Grid
-              item
-              xs={0}
-              md={6}
-              sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <Link href='/' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
-                Home
-              </Link>
-              <Link href='/products' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
-                Products
-              </Link>
-              <Link
-                id='collection-btn'
-                sx={{ textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer', color: textColor }}
-                aria-controls={open() ? 'basic-menu' : undefined}
-                aria-expanded={open() ? 'true' : undefined}
-                aria-haspopup='true'
-                onClick={handlePopoverOpen}>
-                Collections
-              </Link>
-              <Menu
-                id='collection-menu'
-                open={open()}
-                anchorEl={anchorEl()}
-                MenuListProps={{
-                  'aria-labelledby': 'collection-btn',
-                }}
-                onClose={handlePopoverClose}>
-                <For
-                  each={collections()}
-                  children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
-                />
-              </Menu>
-            </Grid>
-            <Grid item xs={9} md={3}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
-                <IconButton>
-                  <ShoppingCartIcon />
-                </IconButton>
-                <Box as='p'>{cartCount}</Box>
-              </Box>
-            </Grid>
+    <AppBar position='fixed' sx={{ backgroundColor: '#FFF' }}>
+      <Toolbar sx={{ flexDirection: 'column' }} disableGutters>
+        <SubHeader />
+        <Grid container>
+          <Grid item xs={3} md={3}>
+            <LinkStyled href='/'>
+              <Logo />
+            </LinkStyled>
           </Grid>
-        </Toolbar>
-      </AppBar>
-    </Box>
+          <Grid
+            item
+            xs={0}
+            md={6}
+            sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
+            <LinkStyled href='/'>Home</LinkStyled>
+            <LinkStyled href='/products'>Products</LinkStyled>
+            <LinkStyled href='#'>Pages</LinkStyled>
+            <LinkStyled href='#'>Blogs</LinkStyled>
+            <LinkStyled
+              id='collection-btn'
+              aria-controls={open() ? 'basic-menu' : undefined}
+              aria-expanded={open() ? 'true' : undefined}
+              aria-haspopup='true'
+              onClick={handlePopoverOpen}
+              href='#'>
+              Collections
+            </LinkStyled>
+            <Menu
+              id='collection-menu'
+              open={open()}
+              anchorEl={anchorEl()}
+              MenuListProps={{
+                'aria-labelledby': 'collection-btn',
+              }}
+              onClose={handlePopoverClose}>
+              <For
+                each={collections()}
+                children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
+              />
+            </Menu>
+          </Grid>
+          <Grid item xs={9} md={3} pr={2}>
+            <CartContainer>
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+              <IconButton>
+                <SettingsIcon />
+              </IconButton>
+              <Link href='/shopping-cart'>
+                <IconButton>
+                  <Badge badgeContent={cart().items.length} color='primary'>
+                    <ShoppingCartIcon sx={{ color: '#777' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+            </CartContainer>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 };
+
+const LinkStyled = styled(Link)({
+  color: '#777',
+  textDecoration: 'none',
+  fontSize: 16,
+});
+
+const CartContainer = styled(Box)({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  height: '100%',
+});
 
 export default Header;
