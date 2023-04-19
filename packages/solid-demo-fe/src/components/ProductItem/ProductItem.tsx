@@ -112,7 +112,7 @@ const NewTag = styled('span')({
 const ListOption = styled('div')({
   padding: 4,
   position: 'absolute',
-  right: 0,
+  right: -50,
   bottom: 0,
   display: 'flex',
   gap: 8,
