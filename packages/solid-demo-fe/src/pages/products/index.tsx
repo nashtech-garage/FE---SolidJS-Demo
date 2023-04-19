@@ -1,10 +1,9 @@
 import { createSignal, createEffect } from 'solid-js';
-import { Box } from '@suid/material';
+import { Container } from '@suid/material';
 
 import { medusaClient } from '../../utils';
 import { IProduct } from '../../types';
 import { Product } from '../../components';
-import { Footer } from '../../layouts';
 
 function Products() {
   const [products, setProducts] = createSignal<IProduct[]>([]);
@@ -17,10 +16,9 @@ function Products() {
     fetchProducts();
   });
   return (
-    <Box>
+    <Container>
       <Product.List list={products} />
-      <Footer />
-    </Box>
+    </Container>
   );
 }
 

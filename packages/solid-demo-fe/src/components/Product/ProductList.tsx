@@ -30,7 +30,7 @@ function ProductList({ list, containerClass }: ProductListProps) {
                 md: '1fr 1fr 1fr 1fr',
               },
             }}>
-            <For each={list()} children={(data, index) => <ProductItem data={data} index={index} />} />
+            <For each={list()} children={(data, index) => <ProductItem product={data} index={index} />} />
           </Box>
         }
       />

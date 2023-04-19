@@ -3,3 +3,7 @@ export * from './Product';
 export * from './Snackbar';
 export * from './ServiceInfo';
 export * from './Slider';
+export * from './HeroBanner';
+export * from './Logo';
+export * from './PageTitleWrapper';
+export * from './Table';

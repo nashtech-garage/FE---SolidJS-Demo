@@ -1,69 +1,84 @@
-import { Divider, Box, Grid, Typography } from '@suid/material';
+import { Divider, Box, Grid, Typography, styled } from '@suid/material';
 import {
   AirportShuttle as AirportShuttleIcon,
   QueryBuilder as QueryBuilderIcon,
   AddShoppingCart as AddShoppingCartIcon,
 } from '@suid/icons-material';
 
-const itemStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 4,
-  gap: 2,
-};
-
 const iconStyle = {
   fontSize: '2.5rem',
   color: 'primary.main',
 };
 
-const titleStyle = {
+const ServiceInfo = () => {
+  return (
+    <SectionStyled component='section'>
+      <Divider />
+      <ContainerStyled container>
+        <ItemStyled item md>
+          <AirportShuttleIcon fontSize='inherit' sx={iconStyle} />
+          <ItemContentStyled>
+            <TitleStyled variant='button'>SHIPPING</TitleStyled>
+            <Typography variant='caption'>Nationwide shipping service</Typography>
+          </ItemContentStyled>
+        </ItemStyled>
+        <Divider orientation='vertical' flexItem />
+        <ItemStyled item md>
+          <QueryBuilderIcon fontSize='inherit' sx={iconStyle} />
+          <ItemContentStyled>
+            <TitleStyled variant='button'>24 X 7 SERVICE</TitleStyled>
+            <Typography variant='caption'>Online Service For New Customer</Typography>
+          </ItemContentStyled>
+        </ItemStyled>
+        <Divider orientation='vertical' flexItem />
+        <ItemStyled item md>
+          <AddShoppingCartIcon fontSize='inherit' sx={iconStyle} />
+          <ItemContentStyled>
+            <TitleStyled variant='button'>FESTIVAL OFFER</TitleStyled>
+            <Typography variant='caption'>New Online Special Festival Offer</Typography>
+          </ItemContentStyled>
+        </ItemStyled>
+      </ContainerStyled>
+      <Divider />
+    </SectionStyled>
+  );
+};
+
+const SectionStyled = styled(Box)(({ theme }) => ({
+  marginBlock: 64,
+  [theme.breakpoints.up('xs')]: {
+    paddingInline: '0.5rem',
+  },
+  [theme.breakpoints.up('lg')]: {
+    paddingInline: '4rem',
+  },
+}));
+
+const ContainerStyled = styled(Grid)({
+  paddingBlock: 16,
+});
+
+const ItemStyled = styled(Grid)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 4,
+  gap: 2,
+});
+
+const ItemContentStyled = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  flexDirection: 'column',
+});
+
+const TitleStyled = styled(Typography)(({ theme }) => ({
   fontSize: '21px',
   transition: 'all .3s ease',
   '&:hover': {
-    color: 'primary.main',
+    color: theme.palette.primary.main,
   },
-};
-
-const ServiceInfo = () => {
-  return (
-    <Box component='section' sx={{ paddingInline: 20, marginBlock: 8 }}>
-      <Divider />
-      <Grid container sx={{ paddingBlock: 4 }}>
-        <Grid item md sx={itemStyle}>
-          <AirportShuttleIcon fontSize='inherit' sx={iconStyle} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <Typography variant='button' sx={titleStyle}>
-              SHIPPING
-            </Typography>
-            <Typography variant='caption'>Nationwide shipping service</Typography>
-          </Box>
-        </Grid>
-        <Divider orientation='vertical' flexItem />
-        <Grid item md sx={itemStyle}>
-          <QueryBuilderIcon fontSize='inherit' sx={iconStyle} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <Typography variant='button' sx={titleStyle}>
-              24 X 7 SERVICE
-            </Typography>
-            <Typography variant='caption'>Online Service For New Customer</Typography>
-          </Box>
-        </Grid>
-        <Divider orientation='vertical' flexItem />
-        <Grid item md sx={itemStyle}>
-          <AddShoppingCartIcon fontSize='inherit' sx={iconStyle} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <Typography variant='button' sx={titleStyle}>
-              FESTIVAL OFFER
-            </Typography>
-            <Typography variant='caption'>New Online Special Festival Offer</Typography>
-          </Box>
-        </Grid>
-      </Grid>
-      <Divider />
-    </Box>
-  );
-};
+}));
 
 export { ServiceInfo };

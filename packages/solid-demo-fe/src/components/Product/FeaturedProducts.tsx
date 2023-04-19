@@ -1,6 +1,6 @@
 //ProductList.jsx
 import { createEffect, createSignal, For } from 'solid-js';
-import { Box, Typography, ToggleButton, ToggleButtonGroup } from '@suid/material';
+import { Box, Typography, ToggleButton, ToggleButtonGroup, styled } from '@suid/material';
 
 import { medusaClient } from '../../utils';
 import { IProductType, IProduct } from '../../types';
@@ -40,27 +40,14 @@ const FeaturedProducts = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          marginTop: '2rem',
-          paddingInline: { lg: '4rem', xs: '0.5rem' },
-        }}
-        component='section'>
-        <Typography
-          sx={{
-            textAlign: 'center',
-            fontSize: '1.5rem',
-            marginBottom: '1rem',
-          }}>
-          Featured Products
-        </Typography>
-        <ToggleButtonGroup
+      <SectionStyled component='section'>
+        <TitleStyled>Featured Products</TitleStyled>
+        <ToggleButtonGroupStyled
           value={selected()}
           onChange={handleSelectProductType}
           exclusive
           size='small'
-          aria-label='product types'
-          sx={{ justifyContent: 'center', marginBlock: '1rem', display: { xs: 'none', md: 'flex' } }}>
+          aria-label='product types'>
           <ToggleButton value='all'>All</ToggleButton>
           <For
             each={productTypes()}
@@ -70,13 +57,38 @@ const FeaturedProducts = () => {
               </ToggleButton>
             )}
           />
-        </ToggleButtonGroup>
-        <Box sx={{ margin: { xs: '0', md: '0 2rem' } }}>
-          <ProductList list={products} />
-        </Box>
-      </Box>
+        </ToggleButtonGroupStyled>
+        <ProductList list={products} />
+      </SectionStyled>
     </>
   );
 };
+
+const SectionStyled = styled(Box)(({ theme }) => ({
+  marginBlock: 64,
+  [theme.breakpoints.up('xs')]: {
+    paddingInline: '0.5rem',
+  },
+  [theme.breakpoints.up('lg')]: {
+    paddingInline: '4rem',
+  },
+}));
+
+const TitleStyled = styled(Typography)({
+  textAlign: 'center',
+  fontSize: '1.5rem',
+  marginBottom: '1rem',
+});
+
+const ToggleButtonGroupStyled = styled(ToggleButtonGroup)(({ theme }) => ({
+  justifyContent: 'center',
+  marginBlock: '1rem',
+  [theme.breakpoints.up('xs')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.up('lg')]: {
+    display: 'flex',
+  },
+}));
 
 export { FeaturedProducts };

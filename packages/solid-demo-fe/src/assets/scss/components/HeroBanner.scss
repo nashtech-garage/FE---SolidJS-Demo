@@ -4,6 +4,7 @@
   background-position: center;
   height: calc(100vh - 112px);
   padding: 64px;
+  width: 100vw !important;
   &--info {
     flex: 1 0 0%;
     display: flex;

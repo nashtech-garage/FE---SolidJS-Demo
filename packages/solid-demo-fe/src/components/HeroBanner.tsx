@@ -20,7 +20,7 @@ const titleStyle = {
 
 const HeroBanner: Component = () => {
   return (
-    <Box component='section' sx={{ marginBlock: 4 }}>
+    <Box component='section'>
       <Slider>
         <Box class='hero-item'>
           <Grid
