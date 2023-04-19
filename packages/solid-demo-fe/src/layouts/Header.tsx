@@ -8,7 +8,6 @@ import { medusaClient } from '../utils/medusaClient';
 import { ICollection } from '../types';
 import { SubHeader } from './SubHeader';
 import logoImg from '../assets/logo.png';
-import { textColor } from '../theme';
 
 const Header = () => {
   const cartCount = localStorage.getItem('cartCount') ?? 0;
@@ -39,7 +38,7 @@ const Header = () => {
       <AppBar position='fixed' sx={{ boxShadow: 'none', backgroundColor: '#fff' }}>
         <Toolbar sx={{ flexDirection: 'column' }} disableGutters>
           <SubHeader />
-          <Grid container sx={{ paddingInline: 4 }}>
+          <Grid container sx={{ paddingInline: { xs: 0, md: 4 } }}>
             <Grid item xs={3} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
               <img alt='logo' src={logoImg} height={56} />
             </Grid>
@@ -48,15 +47,15 @@ const Header = () => {
               xs={0}
               md={6}
               sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <Link href='/' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
+              <Link href='/' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: 'text.primary' }}>
                 Home
               </Link>
-              <Link href='/products' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: textColor }}>
+              <Link href='/products' sx={{ textTransform: 'uppercase', textDecoration: 'none', color: 'text.primary' }}>
                 Products
               </Link>
               <Link
                 id='collection-btn'
-                sx={{ textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer', color: textColor }}
+                sx={{ textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer', color: 'text.primary' }}
                 aria-controls={open() ? 'basic-menu' : undefined}
                 aria-expanded={open() ? 'true' : undefined}
                 aria-haspopup='true'
@@ -80,13 +79,13 @@ const Header = () => {
             <Grid item xs={9} md={3}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <IconButton>
-                  <SearchIcon />
+                  <SearchIcon color='inherit' sx={{ color: 'text.primary' }} />
                 </IconButton>
                 <IconButton>
-                  <SettingsIcon />
+                  <SettingsIcon color='inherit' sx={{ color: 'text.primary' }} />
                 </IconButton>
                 <IconButton>
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon color='inherit' sx={{ color: 'text.primary' }} />
                 </IconButton>
                 <Box as='p'>{cartCount}</Box>
               </Box>

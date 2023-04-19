@@ -1,4 +1,5 @@
 export * from './NewsLetter';
-export * from './FeaturedProducts';
-export * from './ProductList';
+export * from './Product';
 export * from './Snackbar';
+export * from './ServiceInfo';
+export * from './Slider';

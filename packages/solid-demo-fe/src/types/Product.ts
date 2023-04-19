@@ -13,8 +13,8 @@ export interface IVariant extends ICommon {
 }
 
 export interface IProductType extends ICommon {
-    value: string;
-    metadata: string;
+  value: string;
+  metadata: Record<string, unknown>;
 }
 
 export interface IProduct extends ICommon {
