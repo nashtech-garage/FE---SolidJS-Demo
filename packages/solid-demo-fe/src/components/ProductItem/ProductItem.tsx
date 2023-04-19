@@ -15,12 +15,12 @@ const StarStyled = () => <Star sx={{ fontSize: '0.8rem', color: '#EDB867' }} />;
 function ProductItem(props: ProductItemProps) {
   const [hovering, setHovering] = createSignal(false);
   const [{ product }] = splitProps(props, ['product']);
-  const { regionId, updateCart } = useCart()
+  const { updateCart } = useCart()
   const { title, thumbnail } = product;
 
   const addToCart = (event: MouseEvent) => {
     event.preventDefault()
-    addProduct(product, regionId(), updateCart)
+    addProduct(product.variants[0].id, 1, updateCart)
   };
 
   const addToFavorite = () => {};
@@ -53,7 +53,7 @@ function ProductItem(props: ProductItemProps) {
             <StarStyled />
           </Box>
           <Title color='#777'>{title}</Title>
-          <PriceTag>{getProductPrice(product)}</PriceTag>
+          <PriceTag>{getProductPrice(product.variants[0])}</PriceTag>
         </Box>
         <NewTag>NEW</NewTag>
       </LinkStyled>

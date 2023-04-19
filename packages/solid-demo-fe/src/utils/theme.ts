@@ -1,5 +1,5 @@
 import { createTheme } from '@suid/material';
-import { green, orange, purple, red } from '@suid/material/colors';
+import { green, grey, red } from '@suid/material/colors';
 
 export const theme = createTheme({
   components: {
@@ -14,6 +14,9 @@ export const theme = createTheme({
     secondary: {
       main: green[500],
       contrastText: '#FFF'
+    },
+    info: {
+      main: grey[500],
     }
   },
 });
