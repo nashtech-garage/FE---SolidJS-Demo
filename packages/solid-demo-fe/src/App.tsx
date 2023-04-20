@@ -1,36 +1,23 @@
 import { lazy } from 'solid-js';
 import { Routes, Route } from '@solidjs/router';
-import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
-import { ThemeProvider } from '@suid/material';
 
 import { MainLayout } from './layouts';
-import { theme } from './utils/theme';
-import { CartProvider } from './providers';
-
 
 const Products = lazy(() => import('./pages/products'));
 const Home = lazy(() => import('./pages/home'));
 const SingleProduct = lazy(() => import('./pages/single-product'));
 const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
 
-const queryClient = new QueryClient();
-
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <Routes>
-            <Route path='/' element={<MainLayout />}>
-              <Route path='/' component={Home} />
-              <Route path='/products' component={Products} />
-              <Route path='/products/:productId' component={SingleProduct} />
-              <Route path='/shopping-cart' component={ShoppingCart} />
-            </Route>
-          </Routes>
-        </CartProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <Routes>
+      <Route path='/' element={<MainLayout />}>
+        <Route path='/' component={Home} />
+        <Route path='/products' component={Products} />
+        <Route path='/products/:productId' component={SingleProduct} />
+        <Route path='/shopping-cart' component={ShoppingCart} />
+      </Route>
+    </Routes>
   );
 }
 
