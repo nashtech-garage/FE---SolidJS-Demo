@@ -1,5 +1,6 @@
 import type { Component } from 'solid-js';
-import { Box, Button, Link, Typography, Grid } from '@suid/material';
+import { Box, Button, Typography, Grid } from '@suid/material';
+import { Link } from '@solidjs/router';
 
 import { Slider } from './Slider';
 import heroBg1 from '../assets/images/hero-banner-1.jpg';
@@ -35,7 +36,7 @@ const HeroBanner: Component = () => {
                 <Typography variant='h1' sx={titleStyle}>
                   FIND YOUR FAVORITE
                 </Typography>
-                <Link href='/products' underline='none'>
+                <Link href='/products'>
                   <Button variant='contained' color='primary' sx={{ color: '#fff' }}>
                     SHOP NOW
                   </Button>
@@ -57,7 +58,7 @@ const HeroBanner: Component = () => {
                 <Typography variant='h1' sx={titleStyle}>
                   EXPLORE OUR STORE
                 </Typography>
-                <Link href='/products' underline='none'>
+                <Link href='/products'>
                   <Button variant='contained' color='primary' sx={{ color: '#fff' }}>
                     LEARN MORE
                   </Button>
