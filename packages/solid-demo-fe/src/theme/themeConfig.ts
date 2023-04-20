@@ -2,6 +2,18 @@ import { createTheme } from '@suid/material';
 import { grey, deepOrange, green } from '@suid/material/colors';
 
 const themeConfig = createTheme({
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        style: {
+          "border-radius": 0
+        },
+      }
+    }
+  },
+  typography: {
+    fontFamily: 'Lato'
+  },
   palette: {
     text: {
       primary: grey[900],

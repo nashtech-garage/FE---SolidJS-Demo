@@ -1,54 +1,163 @@
-import { For, createEffect } from 'solid-js';
-import { Box, Button, Container, Table, TableBody, TableHead, TableRow, TableCell } from '@suid/material';
+import { For } from 'solid-js';
+import {
+  Box,
+  Button,
+  Container,
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  Typography,
+  TableContainer,
+  styled,
+} from '@suid/material';
 
-import { PageTitleWrapper, TableHeadCell } from '../../components';
+import { PageTitleWrapper } from '../../components';
 import { useCart } from '../../contexts';
+import { medusaClient } from '../../utils';
+import CounterButton from '../../components/CounterButton';
+import { Link } from '@solidjs/router';
+
+interface Column {
+  title: string;
+  align?: 'left' | 'right' | 'center';
+}
+
+const columns: Column[] = [
+  { title: 'Image', align: 'center' },
+  { title: 'Product Name', align: 'left' },
+  { title: 'Price', align: 'center' },
+  { title: 'Quantity', align: 'center' },
+  { title: 'Action', align: 'center' },
+  { title: 'Total', align: 'center' },
+];
 
 function ShoppingCart() {
-  const { cart } = useCart();
+  const { cart, updateCart } = useCart();
 
-  createEffect(() => {
+  const removeItem = async (item: any) => {
+    try {
+      const res = await medusaClient.carts.lineItems.delete(item.cart_id, item.id);
+      updateCart(res.cart);
+    } catch (error) {
+      console.log('Remove item error:', error);
+    }
+  };
+
+  const onChangeQuantity = async (item: any, nextQuantity: number) => {
+    try {
+      const { cart } = await medusaClient.carts.lineItems.update(item.cart_id, item.id, {
+        quantity: nextQuantity,
+      });
+      updateCart(cart);
+    } catch (error) {
+      console.log('Update quantity error:', error);
+    }
+  };
+
+  const handleCheckout = () => {
     console.log(cart());
-  });
+  };
 
   return (
     <Box>
-      <PageTitleWrapper title='Cart' />
-
+      <PageTitleWrapper title='CART' />
       <Container>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeadCell>Image</TableHeadCell>
-              <TableHeadCell>Product Name</TableHeadCell>
-              <TableHeadCell>Price</TableHeadCell>
-              <TableHeadCell>Quantity</TableHeadCell>
-              <TableHeadCell>Action</TableHeadCell>
-              <TableHeadCell>Total</TableHeadCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <For each={cart().items}>
-              {(item) => (
-                <TableRow>
-                  <TableCell>
-                    <img width={66} src={item.thumbnail} />
-                  </TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.unit_price}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>
-                    <Button>&#10006;</Button>
-                  </TableCell>
-                  <TableCell>${item.total}</TableCell>
-                </TableRow>
-              )}
-            </For>
-          </TableBody>
-        </Table>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <For each={columns}>
+                  {(column) => (
+                    <TableCell align={column.align}>
+                      <Typography color='#222' textTransform='uppercase' fontSize='0.9rem' fontWeight={700}>
+                        {column.title}
+                      </Typography>
+                    </TableCell>
+                  )}
+                </For>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <For each={cart().items}>
+                {(item) => (
+                  <TableRow>
+                    <TableCell align='center'>
+                      <ProductImage src={item.thumbnail} />
+                    </TableCell>
+                    <TableCell align='left'>
+                      <Typography fontSize='0.8rem' color='#777'>
+                        {item.title}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize='1.25rem'>${item.unit_price.toFixed(2)}</Typography>
+                    </TableCell>
+                    <TableCell align='center'>
+                      <CounterButton
+                        quantity={item.quantity}
+                        onChangeQuantity={(number) => onChangeQuantity(item, number)}
+                      />
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Button onClick={() => removeItem(item)}>&#10006;</Button>
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Typography fontSize='1.25rem' color='primary'>
+                        ${item.total.toFixed(2)}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </For>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TableFooter>
+          <Box>
+            <Link href='/products'>
+              <Button size='large' variant='contained'>
+                Continue Shopping
+              </Button>
+            </Link>
+          </Box>
+          <CheckoutWrapper>
+            <Typography
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}>
+              Total Price:
+              <Typography variant='h5' ml={2} sx={{ display: 'inline' }}>
+                $271
+              </Typography>
+            </Typography>
+            <Button sx={{ marginTop: 1 }} variant='contained' onClick={handleCheckout}>
+              Check out
+            </Button>
+          </CheckoutWrapper>
+        </TableFooter>
       </Container>
     </Box>
   );
 }
+
+const ProductImage = styled('img')({
+  width: 66,
+  borderRadius: 4,
+});
+
+const TableFooter = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+  paddingTop: 16,
+  paddingBottom: 16,
+});
+
+const CheckoutWrapper = styled(Box)({
+  textAlign: 'right',
+});
 
 export default ShoppingCart;
