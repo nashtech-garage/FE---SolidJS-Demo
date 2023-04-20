@@ -18,6 +18,7 @@ import { useCart } from '../../contexts';
 import { medusaClient } from '../../utils';
 import CounterButton from '../../components/CounterButton';
 import { Link } from '@solidjs/router';
+import { formatPrice } from '../../utils/productHelper';
 
 interface Column {
   title: string;
@@ -80,11 +81,11 @@ function ShoppingCart() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <For each={cart().items}>
+              <For each={cart()?.items}>
                 {(item) => (
                   <TableRow>
                     <TableCell align='center'>
-                      <ProductImage src={item.thumbnail} />
+                      <ProductImage src={item.thumbnail || undefined} />
                     </TableCell>
                     <TableCell align='left'>
                       <Typography fontSize='0.8rem' color='#777'>
@@ -92,7 +93,7 @@ function ShoppingCart() {
                       </Typography>
                     </TableCell>
                     <TableCell align='center'>
-                      <Typography fontSize='1.25rem'>${item.unit_price.toFixed(2)}</Typography>
+                      <Typography fontSize='1.25rem'>{formatPrice(item.unit_price)}</Typography>
                     </TableCell>
                     <TableCell align='center'>
                       <CounterButton
@@ -105,7 +106,7 @@ function ShoppingCart() {
                     </TableCell>
                     <TableCell align='center'>
                       <Typography fontSize='1.25rem' color='primary'>
-                        ${item.total.toFixed(2)}
+                        {formatPrice(item.total)}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -130,7 +131,7 @@ function ShoppingCart() {
               }}>
               Total Price:
               <Typography variant='h5' ml={2} sx={{ display: 'inline' }}>
-                $271
+                {formatPrice(cart()?.total)}
               </Typography>
             </Typography>
             <Button sx={{ marginTop: 1 }} variant='contained' onClick={handleCheckout}>

@@ -1,10 +1,14 @@
 import { medusaClient } from './medusaClient';
 
+export function formatPrice(price?: number | null) {
+  if (!price) return ''
+  return '$' + (price / 100).toFixed(2);
+}
+
 export function getProductPrice(variant?: { prices: any[] }) {
   const usdPriceIndex = 1;
   if (variant) {
-    const price = variant.prices[usdPriceIndex].amount / 100;
-    return '$' + price.toFixed(2);
+    return formatPrice(variant.prices[usdPriceIndex].amount);
   }
   return '';
 }
@@ -12,9 +16,8 @@ export function getProductPrice(variant?: { prices: any[] }) {
 async function createCart() {
   try {
     const { regions } = await medusaClient.regions.list();
-    console.log({ regions })
 
-    const regionId = regions[0]?.id
+    const regionId = regions[0]?.id;
     if (regionId) {
       const { cart } = await medusaClient.carts.create({ region_id: regionId });
       localStorage.setItem('cartId', cart.id);

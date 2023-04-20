@@ -3,7 +3,7 @@ import { grey, deepOrange, green } from '@suid/material/colors';
 
 const themeConfig = createTheme({
   components: {
-    MuiButtonBase: {
+    MuiButton: {
       defaultProps: {
         style: {
           "border-radius": 0
