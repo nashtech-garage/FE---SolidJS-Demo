@@ -1,13 +1,15 @@
 import { Component } from 'solid-js';
-import { Typography, styled } from '@suid/material';
+import { Breakpoint, Theme, Typography, styled } from '@suid/material';
+import { SxProps } from '@suid/system';
 
 type LogoProps = {
   class?: string;
+  sx?: SxProps<Theme<Breakpoint>>;
 };
 
 const Logo: Component<LogoProps> = (props) => {
   return (
-    <LogoTypography class={props.class}>
+    <LogoTypography class={props.class} sx={props.sx}>
       <span>NT</span>
       <span>Kart</span>
     </LogoTypography>

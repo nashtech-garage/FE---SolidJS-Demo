@@ -1,4 +1,4 @@
-import { Product, ServiceInfo, HeroBanner } from '../../components';
+import { Product, ServiceInfo, HeroBanner, BrandList } from '../../components';
 
 function Home() {
   return (
@@ -6,6 +6,7 @@ function Home() {
       <HeroBanner />
       <Product.Featured />
       <ServiceInfo />
+      <BrandList />
     </>
   );
 }
