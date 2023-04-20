@@ -1,11 +1,9 @@
 import { createSignal } from 'solid-js';
-import { Button, Grid, Menu, MenuItem, Typography, IconButton } from '@suid/material';
+import { Button, Grid, Menu, MenuItem, Typography, IconButton, styled } from '@suid/material';
 import LocalPhoneIcon from '@suid/icons-material/LocalPhone';
 import FavoriteIcon from '@suid/icons-material/Favorite';
 import PersonIcon from '@suid/icons-material/Person';
 import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown';
-
-import { headerTextColor, headerBg } from '../theme';
 
 function SubHeader() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null);
@@ -15,31 +13,19 @@ function SubHeader() {
   };
 
   return (
-    <Grid container backgroundColor={headerBg} sx={{ paddingInline: { xs: 1, md: 4 } }}>
-      <Grid item xs={6} md={6} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-        <Typography
-          sx={{ fontSize: '14px', color: headerTextColor, alignItems: 'center', display: { xs: 'none', md: 'flex' } }}>
-          Welcome to NT Store
-        </Typography>
-        <Typography sx={{ fontSize: '14px', color: headerTextColor, alignItems: 'center', display: 'flex' }}>
-          <LocalPhoneIcon sx={{ fontSize: '15px', marginLeft: { md: 2 }, marginRight: 1, color: 'primary.main' }} />
+    <ContainerStyled container>
+      <LeftBoxStyled item xs={6} md={6}>
+        <WelcomeTextStyled>Welcome to NT Store</WelcomeTextStyled>
+        <CallUsTextStyled>
+          <LocalPhoneIconStyled />
           Call Us: 123-456-7890
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={6}
-        md={6}
-        sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: { md: 2, xs: 0.5 } }}>
-        <Button
-          startIcon={<FavoriteIcon />}
-          sx={{ color: headerTextColor, textTransform: 'none', display: { xs: 'none', md: 'inline-flex' } }}>
-          Wishlist
-        </Button>
-        <Button
+        </CallUsTextStyled>
+      </LeftBoxStyled>
+      <ToolBoxStyled item xs={6} md={6}>
+        <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
+        <ButtonStyled
           startIcon={<PersonIcon />}
           endIcon={<KeyboardArrowDownIcon />}
-          sx={{ color: headerTextColor, textTransform: 'none', display: { xs: 'none', md: 'inline-flex' } }}
           id='my-account-button'
           aria-controls={open() ? 'my-account-menu' : undefined}
           aria-haspopup='true'
@@ -48,13 +34,12 @@ function SubHeader() {
             setAnchorEl(event.currentTarget);
           }}>
           My Account
-        </Button>
+        </ButtonStyled>
         {/* Mobile view */}
-        <IconButton sx={{ display: { xs: 'block', md: 'none' } }} size='small'>
+        <IconButtonStyled size='small'>
           <FavoriteIcon fontSize='inherit' />
-        </IconButton>
-        <IconButton
-          sx={{ display: { xs: 'block', md: 'none' } }}
+        </IconButtonStyled>
+        <IconButtonStyled
           size='small'
           id='my-account-button'
           aria-controls={open() ? 'my-account-menu' : undefined}
@@ -64,7 +49,7 @@ function SubHeader() {
             setAnchorEl(event.currentTarget);
           }}>
           <PersonIcon fontSize='inherit' />
-        </IconButton>
+        </IconButtonStyled>
         <Menu
           id='my-account-menu'
           anchorEl={anchorEl()}
@@ -75,9 +60,85 @@ function SubHeader() {
           <MenuItem onClick={handleClose}>My account</MenuItem>
           <MenuItem onClick={handleClose}>Logout</MenuItem>
         </Menu>
-      </Grid>
-    </Grid>
+      </ToolBoxStyled>
+    </ContainerStyled>
   );
 }
+
+const ContainerStyled = styled(Grid)(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    paddingInline: 32,
+  },
+  [theme.breakpoints.down('md')]: {
+    paddingInline: 16,
+  },
+  backgroundColor: theme.palette.grey[300],
+}));
+
+const WelcomeTextStyled = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  color: theme.palette.grey[600],
+  alignItems: 'center',
+  [theme.breakpoints.up('md')]: {
+    display: 'flex',
+  },
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
+
+const CallUsTextStyled = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  color: theme.palette.grey[600],
+  alignItems: 'center',
+  display: 'flex',
+}));
+
+const LeftBoxStyled = styled(Grid)({
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+});
+
+const LocalPhoneIconStyled = styled(LocalPhoneIcon)(({ theme }) => ({
+  fontSize: '15px',
+  marginRight: 4,
+  color: theme.palette.primary.main,
+  [theme.breakpoints.up('md')]: {
+    marginLeft: 16,
+  },
+}));
+
+const ToolBoxStyled = styled(Grid)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  [theme.breakpoints.up('md')]: {
+    gap: 16,
+  },
+  [theme.breakpoints.down('md')]: {
+    gap: 4,
+  },
+}));
+
+const ButtonStyled = styled(Button)(({ theme }) => ({
+  color: theme.palette.grey[600],
+  textTransform: 'none',
+  [theme.breakpoints.up('md')]: {
+    display: 'inline-flex',
+  },
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
+
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.down('md')]: {
+    display: 'block',
+  },
+}));
 
 export { SubHeader };

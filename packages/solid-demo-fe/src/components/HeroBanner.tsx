@@ -1,22 +1,9 @@
 import { Component } from 'solid-js';
-import { Box, Button, Link, Typography, Grid } from '@suid/material';
+import { Box, Button, Link, Typography, Grid, styled } from '@suid/material';
 
 import { Slider } from './Slider';
 import heroBg1 from '../assets/images/hero-banner-1.jpg';
 import heroBg2 from '../assets/images/hero-banner-2.jpg';
-import { headerTextColor } from '../theme';
-
-const subTitleStyle = {
-  fontWeight: 700,
-  letterSpacing: '.4em',
-  color: headerTextColor,
-  fontSize: '18px',
-};
-
-const titleStyle = {
-  fontSize: '59px',
-  marginBlock: 2,
-};
 
 const HeroBanner: Component = () => {
   return (
@@ -29,12 +16,8 @@ const HeroBanner: Component = () => {
             sx={{ backgroundImage: `url(${heroBg1})` }}>
             <Grid md={6} class='hero-item-container--info'>
               <Box class='hero-item-container--info__content'>
-                <Typography variant='h4' sx={subTitleStyle}>
-                  Welcome To NT Store
-                </Typography>
-                <Typography variant='h1' sx={titleStyle}>
-                  FIND YOUR FAVORITE
-                </Typography>
+                <SubTitleStyled variant='h4'>Welcome To NT Store</SubTitleStyled>
+                <TitleStyled variant='h1'>FIND YOUR FAVORITE</TitleStyled>
                 <Link href='/products' underline='none'>
                   <Button variant='contained' color='primary' sx={{ color: '#fff' }}>
                     SHOP NOW
@@ -51,12 +34,8 @@ const HeroBanner: Component = () => {
             sx={{ backgroundImage: `url(${heroBg2})` }}>
             <Grid md={6} class='hero-item-container--info'>
               <Box class='hero-item-container--info__content'>
-                <Typography variant='h4' sx={subTitleStyle}>
-                  Thank You Your Visting
-                </Typography>
-                <Typography variant='h1' sx={titleStyle}>
-                  EXPLORE OUR STORE
-                </Typography>
+                <SubTitleStyled variant='h4'>Thank You Your Visting</SubTitleStyled>
+                <TitleStyled variant='h1'>EXPLORE OUR STORE</TitleStyled>
                 <Link href='/products' underline='none'>
                   <Button variant='contained' color='primary' sx={{ color: '#fff' }}>
                     LEARN MORE
@@ -70,5 +49,17 @@ const HeroBanner: Component = () => {
     </Box>
   );
 };
+
+const TitleStyled = styled(Typography)({
+  fontSize: '59px',
+  marginBlock: 16,
+});
+
+const SubTitleStyled = styled(Typography)(({ theme }) => ({
+  fontWeight: 700,
+  letterSpacing: '.4em',
+  color: theme.palette.grey[600],
+  fontSize: '18px',
+}));
 
 export { HeroBanner };

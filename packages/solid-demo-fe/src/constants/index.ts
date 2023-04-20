@@ -5,6 +5,12 @@ import Levis from '../assets/icons/levis.svg';
 import NewBalance from '../assets/icons/new.svg';
 import Prada from '../assets/icons/prada.svg';
 import Zara from '../assets/icons/zara.svg';
+import Google from '../assets/icons/google-plus.svg';
+import Facebook from '../assets/icons/facebook.svg';
+import Instagram from '../assets/icons/instagram.svg';
+import Twitter from '../assets/icons/twitter.svg';
+
+export * from './footer';
 
 export const BRAND_ICONS = [
   {
@@ -34,5 +40,24 @@ export const BRAND_ICONS = [
   {
     src: Gucci,
     alt: 'Gucci',
+  },
+];
+
+export const SOCIAL_NETWORK_LIST = [
+  {
+    src: Facebook,
+    alt: 'Facebook',
+  },
+  {
+    src: Google,
+    alt: 'Google',
+  },
+  {
+    src: Instagram,
+    alt: 'Instagram',
+  },
+  {
+    src: Twitter,
+    alt: 'Twitter',
   },
 ];
