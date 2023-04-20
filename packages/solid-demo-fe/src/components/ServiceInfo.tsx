@@ -5,6 +5,8 @@ import {
   AddShoppingCart as AddShoppingCartIcon,
 } from '@suid/icons-material';
 
+import { Section } from './Section';
+
 const iconStyle = {
   fontSize: '2.5rem',
   color: 'primary.main',
@@ -12,7 +14,7 @@ const iconStyle = {
 
 const ServiceInfo = () => {
   return (
-    <SectionStyled component='section'>
+    <Section>
       <Divider />
       <ContainerStyled container>
         <ItemStyled item md>
@@ -22,7 +24,7 @@ const ServiceInfo = () => {
             <Typography variant='caption'>Nationwide shipping service</Typography>
           </ItemContentStyled>
         </ItemStyled>
-        <Divider orientation='vertical' flexItem />
+        <DividerStyled orientation='vertical' flexItem />
         <ItemStyled item md>
           <QueryBuilderIcon fontSize='inherit' sx={iconStyle} />
           <ItemContentStyled>
@@ -30,7 +32,7 @@ const ServiceInfo = () => {
             <Typography variant='caption'>Online Service For New Customer</Typography>
           </ItemContentStyled>
         </ItemStyled>
-        <Divider orientation='vertical' flexItem />
+        <DividerStyled orientation='vertical' flexItem />
         <ItemStyled item md>
           <AddShoppingCartIcon fontSize='inherit' sx={iconStyle} />
           <ItemContentStyled>
@@ -40,38 +42,47 @@ const ServiceInfo = () => {
         </ItemStyled>
       </ContainerStyled>
       <Divider />
-    </SectionStyled>
+    </Section>
   );
 };
 
-const SectionStyled = styled(Box)(({ theme }) => ({
-  marginBlock: 64,
+const ContainerStyled = styled(Grid)(({ theme }) => ({
+  paddingBlock: 16,
   [theme.breakpoints.up('xs')]: {
-    paddingInline: '0.5rem',
-  },
-  [theme.breakpoints.up('lg')]: {
-    paddingInline: '4rem',
+    justifyContent: 'center',
+    gap: 8,
   },
 }));
 
-const ContainerStyled = styled(Grid)({
-  paddingBlock: 16,
-});
-
-const ItemStyled = styled(Grid)({
+const ItemStyled = styled(Grid)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   padding: 4,
-  gap: 2,
-});
+  gap: 16,
+  [theme.breakpoints.up('xs')]: {
+    flexDirection: 'column',
+  },
+}));
 
-const ItemContentStyled = styled(Box)({
+const DividerStyled = styled(Divider)(({ theme }) => ({
+  [theme.breakpoints.up('xs')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.up('md')]: {
+    display: 'block',
+  },
+}));
+
+const ItemContentStyled = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-start',
   flexDirection: 'column',
-});
+  [theme.breakpoints.up('xs')]: {
+    alignItems: 'center',
+  },
+}));
 
 const TitleStyled = styled(Typography)(({ theme }) => ({
   fontSize: '21px',

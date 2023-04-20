@@ -7,3 +7,5 @@ export * from './HeroBanner';
 export * from './Logo';
 export * from './PageTitleWrapper';
 export * from './Table';
+export * from './BrandList';
+export * from './Section';

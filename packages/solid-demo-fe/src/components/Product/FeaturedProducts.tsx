@@ -1,10 +1,10 @@
-//ProductList.jsx
 import { createEffect, createSignal, For } from 'solid-js';
-import { Box, Typography, ToggleButton, ToggleButtonGroup, styled } from '@suid/material';
+import { Typography, ToggleButton, ToggleButtonGroup, styled } from '@suid/material';
 
 import { medusaClient } from '../../utils';
 import { IProductType, IProduct } from '../../types';
 import { ProductList } from './ProductList';
+import { Section } from '../Section';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = createSignal<IProduct[]>([]);
@@ -40,7 +40,7 @@ const FeaturedProducts = () => {
 
   return (
     <>
-      <SectionStyled component='section'>
+      <Section>
         <TitleStyled>Featured Products</TitleStyled>
         <ToggleButtonGroupStyled
           value={selected()}
@@ -59,20 +59,10 @@ const FeaturedProducts = () => {
           />
         </ToggleButtonGroupStyled>
         <ProductList list={products} />
-      </SectionStyled>
+      </Section>
     </>
   );
 };
-
-const SectionStyled = styled(Box)(({ theme }) => ({
-  marginBlock: 64,
-  [theme.breakpoints.up('xs')]: {
-    paddingInline: '0.5rem',
-  },
-  [theme.breakpoints.up('lg')]: {
-    paddingInline: '4rem',
-  },
-}));
 
 const TitleStyled = styled(Typography)({
   textAlign: 'center',

@@ -1,4 +1,4 @@
-import type { Component } from 'solid-js';
+import { Component } from 'solid-js';
 import { Box, Button, Link, Typography, Grid } from '@suid/material';
 
 import { Slider } from './Slider';
