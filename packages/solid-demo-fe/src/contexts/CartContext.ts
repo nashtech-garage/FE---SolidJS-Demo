@@ -1,14 +1,9 @@
 import { createContext, useContext, Accessor } from 'solid-js';
-
-export type CartType = {
-  id: string | undefined;
-  items: any[];
-};
+import { ICart } from '../types/Cart';
 
 export interface ICartStore {
-  cart: Accessor<CartType>;
-  regionId: Accessor<string>;
-  updateCart: (newCart: CartType) => void;
+  cart: Accessor<ICart | undefined>;
+  updateCart: (newCart: ICart) => void;
 }
 
 export const CartContext = createContext<ICartStore>();

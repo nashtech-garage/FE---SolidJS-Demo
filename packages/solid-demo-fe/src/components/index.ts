@@ -6,4 +6,4 @@ export * from './Slider';
 export * from './HeroBanner';
 export * from './Logo';
 export * from './PageTitleWrapper';
-export * from './Table';
+export * from './CounterButton';
