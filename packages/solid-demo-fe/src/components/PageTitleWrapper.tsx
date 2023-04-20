@@ -9,7 +9,7 @@ const PageTitleWrapper: Component<PageTitleWrapperProps> = (props) => {
   return (
     <MainContainer>
       <Container>
-        <Typography variant='h5' color='#777' fontWeight='bold'>
+        <Typography fontWeight="bold" color='#222'>
           {props.title}
         </Typography>
       </Container>
@@ -19,7 +19,7 @@ const PageTitleWrapper: Component<PageTitleWrapperProps> = (props) => {
 
 const MainContainer = styled(Box)({
   backgroundColor: '#f8f8f8',
-  padding: 32,
+  padding: 16,
   marginBottom: 32,
 });
 

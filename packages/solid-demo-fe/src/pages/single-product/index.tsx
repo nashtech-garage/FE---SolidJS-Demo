@@ -7,6 +7,7 @@ import { useCart } from '../../contexts';
 import { medusaClient } from '../../utils';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { PageTitleWrapper } from '../../components';
+import CounterButton from '../../components/CounterButton';
 
 function SingleProduct() {
   const params = useParams();
@@ -34,13 +35,6 @@ function SingleProduct() {
     if (variant() && variant()?.id === variantId) return true;
     return false;
   };
-
-  const decrement = () => {
-    if (quantity() === 1) return;
-    setQuantity(quantity() - 1);
-  };
-
-  const increment = () => setQuantity(quantity() + 1);
 
   const getOriginalPrice = () => {
     if (!variant()) return '';
@@ -104,15 +98,7 @@ function SingleProduct() {
                 />
               </ButtonSizeGroup>
               <SectionTitle marginY={1}>Quantity</SectionTitle>
-              <ButtonGroup>
-                <Button onClick={decrement} color='info'>
-                  -
-                </Button>
-                <QuantityButton disabled>{quantity()}</QuantityButton>
-                <Button onClick={increment} color='info'>
-                  +
-                </Button>
-              </ButtonGroup>
+              <CounterButton quantity={quantity()} onChangeQuantity={setQuantity} />
             </QuantityBox>
             <Box sx={{ marginBottom: 3 }}>
               <Button onClick={handleAddToCart} variant='contained' color='primary' sx={{ marginRight: 1 }}>
@@ -161,12 +147,6 @@ const SizeButton = styled(Button)({
   '&.active': {
     backgroundColor: '#c2b9b9',
     color: '#FFF',
-  },
-});
-
-const QuantityButton = styled(Button)({
-  '&.Mui-disabled': {
-    color: '#000',
   },
 });
 
