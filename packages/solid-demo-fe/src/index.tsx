@@ -6,7 +6,7 @@ import { ThemeProvider } from '@suid/material';
 import './assets/scss/root.scss';
 import App from './App';
 import { themeConfig } from './theme';
-import { CartProvider, SnackbarProvider } from './providers';
+import { SnackbarProvider } from './providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
 
 const root = document.getElementById('root');
@@ -24,11 +24,9 @@ render(
     <ThemeProvider theme={themeConfig}>
       <SnackbarProvider>
         <QueryClientProvider client={queryClient}>
-          <CartProvider>
-            <Router>
-              <App />
-            </Router>
-          </CartProvider>
+          <Router>
+            <App />
+          </Router>
         </QueryClientProvider>
       </SnackbarProvider>
     </ThemeProvider>

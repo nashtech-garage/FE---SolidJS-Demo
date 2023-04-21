@@ -6,14 +6,15 @@ import { Link } from '@solidjs/router';
 import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../utils/medusaClient';
-import { useCart } from '../contexts';
+import { cartStore } from '../store';
 import { SubHeader } from './SubHeader';
 import { Logo } from '../components';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
-  const { cart } = useCart();
+  const cart = () => cartStore.cart
+
   const collectionsQuery = createQuery(
     () => ['collections'],
     () => medusaClient.collections.list()

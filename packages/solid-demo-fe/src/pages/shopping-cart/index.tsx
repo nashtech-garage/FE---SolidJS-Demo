@@ -16,7 +16,7 @@ import { LineItem } from '@medusajs/medusa';
 import { Link } from '@solidjs/router';
 
 import { PageTitleWrapper } from '../../components';
-import { useCart } from '../../contexts';
+import { CartAction, cartStore, dispatchCart } from '../../store'
 import { medusaClient } from '../../utils';
 import CounterButton from '../../components/CounterButton';
 import { formatPrice } from '../../utils/productHelper';
@@ -36,12 +36,12 @@ const columns: Column[] = [
 ];
 
 function ShoppingCart() {
-  const { cart, updateCart } = useCart();
+  const cart = () => cartStore.cart
 
   const removeItem = async (item: LineItem) => {
     try {
-      const res = await medusaClient.carts.lineItems.delete(item.cart_id, item.id);
-      updateCart(res.cart);
+      const { cart } = await medusaClient.carts.lineItems.delete(item.cart_id, item.id);
+      dispatchCart(CartAction.SetCart, cart)
     } catch (error) {
       console.log('Remove item error:', error);
     }
@@ -52,7 +52,7 @@ function ShoppingCart() {
       const { cart } = await medusaClient.carts.lineItems.update(item.cart_id, item.id, {
         quantity: nextQuantity,
       });
-      updateCart(cart);
+      dispatchCart(CartAction.SetCart, cart)
     } catch (error) {
       console.log('Update quantity error:', error);
     }

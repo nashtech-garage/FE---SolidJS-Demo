@@ -4,11 +4,11 @@ import { Box, Grid, Button, Typography, styled, Container, Divider } from '@suid
 import { createQuery } from '@tanstack/solid-query';
 import { ProductVariant } from '@medusajs/medusa';
 
-import { useCart } from '../../contexts';
 import { medusaClient } from '../../utils';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { PageTitleWrapper } from '../../components';
 import CounterButton from '../../components/CounterButton';
+import { CartAction, dispatchCart } from '../../store';
 
 function SingleProduct() {
   const params = useParams();
@@ -22,14 +22,13 @@ function SingleProduct() {
     () => medusaClient.products.retrieve(productId)
   );
 
-  const { updateCart } = useCart();
   const [variant, setVariant] = createSignal<ProductVariant>();
   const [quantity, setQuantity] = createSignal(1);
 
   const handleAddToCart = async () => {
     const variantId = variant()?.id
     if (variantId) {
-      addProduct(variantId, quantity(), updateCart);
+      addProduct(variantId, quantity(), (newCart) => dispatchCart(CartAction.SetCart, newCart));
     }
   };
 
