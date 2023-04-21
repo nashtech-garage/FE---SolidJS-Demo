@@ -2,7 +2,6 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  height: calc(100vh - 112px);
   padding: 64px;
   width: 100vw !important;
   &--info {
@@ -16,4 +15,8 @@
       flex-direction: column;
     }
   }
+}
+
+.hero-dot-container {
+  bottom: 32px !important;
 }

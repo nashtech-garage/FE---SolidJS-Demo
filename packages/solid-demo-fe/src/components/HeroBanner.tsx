@@ -9,9 +9,9 @@ import heroBg2 from '../assets/images/hero-banner-2.jpg';
 const HeroBanner: Component = () => {
   return (
     <Box component='section'>
-      <Slider>
+      <Slider totalItems={2} dotContainerClass='hero-dot-container'>
         <Box class='hero-item'>
-          <Grid
+          <ItemStyled
             container
             class='hero-item-container hero-item-container--first-block'
             sx={{ backgroundImage: `url(${heroBg1})` }}>
@@ -26,10 +26,10 @@ const HeroBanner: Component = () => {
                 </Link>
               </Box>
             </Grid>
-          </Grid>
+          </ItemStyled>
         </Box>
         <Box class='hero-item'>
-          <Grid
+          <ItemStyled
             container
             class='hero-item-container hero-item-container--second-block'
             sx={{ backgroundImage: `url(${heroBg2})` }}>
@@ -44,12 +44,16 @@ const HeroBanner: Component = () => {
                 </Link>
               </Box>
             </Grid>
-          </Grid>
+          </ItemStyled>
         </Box>
       </Slider>
     </Box>
   );
 };
+
+const ItemStyled = styled(Grid)({
+  height: 'calc(100vh - 118px)',
+});
 
 const TitleStyled = styled(Typography)({
   fontSize: '59px',
