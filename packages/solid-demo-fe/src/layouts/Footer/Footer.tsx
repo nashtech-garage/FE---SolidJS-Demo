@@ -12,12 +12,13 @@ function Footer() {
         <Divider />
         <MainContent />
       </Container>
-
-      <ContainerWhiteStyled maxWidth='xl' component='section'>
-        <CopyrightText>© Create by FE-Team</CopyrightText>
-        <PaymentListStyled>
-          <For each={PAYMENT_LIST} children={(item) => <PaymentImgStyled component='img' {...item} />} />
-        </PaymentListStyled>
+      <ContainerWhiteStyled>
+        <ContainerWrapperStyled maxWidth='xl'>
+          <CopyrightText>© Create by FE-Team</CopyrightText>
+          <PaymentListStyled>
+            <For each={PAYMENT_LIST} children={(item) => <PaymentImgStyled component='img' {...item} />} />
+          </PaymentListStyled>
+        </ContainerWrapperStyled>
       </ContainerWhiteStyled>
     </FooterStyled>
   );
@@ -27,13 +28,16 @@ const FooterStyled = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
 }));
 
-const ContainerWhiteStyled = styled(Container)(({ theme }) => ({
+const ContainerWhiteStyled = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
+}));
+
+const ContainerWrapperStyled = styled(Container)({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   paddingBlock: 16,
-}));
+});
 
 const CopyrightText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[600],
@@ -41,10 +45,10 @@ const CopyrightText = styled(Typography)(({ theme }) => ({
   letterSpacing: 0.5,
 }));
 
-const PaymentListStyled = styled(Box)(({ theme }) => ({
+const PaymentListStyled = styled(Box)({
   display: 'flex',
   gap: 12,
-}));
+});
 
 const PaymentImgStyled = styled(Box)(({ theme }) => ({
   height: 36,

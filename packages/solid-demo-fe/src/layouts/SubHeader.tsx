@@ -101,7 +101,7 @@ const LeftBoxStyled = styled(Grid)({
 });
 
 const LocalPhoneIconStyled = styled(LocalPhoneIcon)(({ theme }) => ({
-  fontSize: '15px',
+  fontSize: 15,
   marginRight: 4,
   color: theme.palette.primary.main,
   [theme.breakpoints.up('md')]: {
@@ -124,6 +124,7 @@ const ToolBoxStyled = styled(Grid)(({ theme }) => ({
 const ButtonStyled = styled(Button)(({ theme }) => ({
   color: theme.palette.grey[600],
   textTransform: 'none',
+  fontSize: 15,
   [theme.breakpoints.up('md')]: {
     display: 'inline-flex',
   },

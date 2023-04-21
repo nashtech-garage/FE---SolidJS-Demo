@@ -16,7 +16,7 @@ const BrandList: Component = () => {
 
   return (
     <Section>
-      <Slider perView={perView()}>
+      <Slider perView={perView()} totalItems={BRAND_ICONS.length}>
         <For each={BRAND_ICONS} children={(data) => <ImageStyled component='img' {...data} />} />
       </Slider>
     </Section>

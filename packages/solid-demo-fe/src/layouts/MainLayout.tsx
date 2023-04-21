@@ -17,7 +17,7 @@ function MainLayout() {
 }
 
 const BoxStyled = styled(Box)({
-  marginBlockStart: 128,
+  marginBlockStart: 118,
 });
 
 export { MainLayout };
