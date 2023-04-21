@@ -3,7 +3,6 @@ import { Routes, Route } from '@solidjs/router';
 
 import { MainLayout } from './layouts';
 import { CartAction, dispatchCart } from './store';
-import { medusaClient } from './utils';
 
 const Products = lazy(() => import('./pages/products'));
 const Home = lazy(() => import('./pages/home'));
@@ -12,15 +11,7 @@ const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
 
 function App() {
   onMount(() => {
-    const getCart = async () => {
-      const cartId = localStorage.getItem('cartId');
-      if (cartId) {
-        const { cart } = await medusaClient.carts.retrieve(cartId);
-        dispatchCart(CartAction.SetCart, cart);
-      }
-    };
-
-    getCart();
+    dispatchCart(CartAction.GetCart);
   });
 
   return (
