@@ -1,7 +1,7 @@
 //ProductList.jsx
 import { For, Show } from 'solid-js';
 import { Box, Typography } from '@suid/material';
-import { Product } from '@medusajs/medusa/dist/models/product'
+import { Product } from '@medusajs/medusa'
 
 import { ProductItem } from './ProductItem';
 

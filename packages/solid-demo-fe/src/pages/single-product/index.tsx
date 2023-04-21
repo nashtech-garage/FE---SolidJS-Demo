@@ -2,6 +2,7 @@ import { For, createEffect, createSignal } from 'solid-js';
 import { useParams } from '@solidjs/router';
 import { Box, Grid, Button, Typography, styled, Container, Divider } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
+import { ProductVariant } from '@medusajs/medusa';
 
 import { useCart } from '../../contexts';
 import { medusaClient } from '../../utils';
@@ -22,12 +23,13 @@ function SingleProduct() {
   );
 
   const { updateCart } = useCart();
-  const [variant, setVariant] = createSignal<any>();
+  const [variant, setVariant] = createSignal<ProductVariant>();
   const [quantity, setQuantity] = createSignal(1);
 
   const handleAddToCart = async () => {
-    if (variant()) {
-      addProduct(variant().id, quantity(), updateCart);
+    const variantId = variant()?.id
+    if (variantId) {
+      addProduct(variantId, quantity(), updateCart);
     }
   };
 
@@ -37,10 +39,12 @@ function SingleProduct() {
   };
 
   const getOriginalPrice = () => {
-    if (!variant()) return '';
-
-    const price = variant().prices[1].amount / 100;
-    return '$' + (price * 0.1111 + price).toFixed(2);
+    const prices = variant()?.prices
+    if (prices && prices.length > 1) { 
+      const price = prices[1].amount / 100;
+      return '$' + (price * 0.1111 + price).toFixed(2);
+    }
+    return ''
   };
 
   const product = () => {

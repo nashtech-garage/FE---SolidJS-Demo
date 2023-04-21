@@ -2,7 +2,7 @@ import { Component, Accessor, splitProps, createSignal } from 'solid-js';
 import { Box, Typography, Grow, styled } from '@suid/material';
 import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
-import { Product } from '@medusajs/medusa/dist/models/product'
+import { Product } from '@medusajs/medusa';
 
 import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { useCart } from '../../contexts';
