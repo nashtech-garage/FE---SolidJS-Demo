@@ -1,20 +1,20 @@
 import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import { Settings as SettingsIcon, Search as SearchIcon } from '@suid/icons-material';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { Link } from '@solidjs/router';
+import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../utils/medusaClient';
 import { useCart } from '../contexts';
-import { ICollection } from '../types';
 import { SubHeader } from './SubHeader';
 import { Logo } from '../components';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
-  const [collections, setCollections] = createSignal<ICollection[]>([]);
   const { cart } = useCart();
+  const collectionsQuery = createQuery(() => ['collections'], () => medusaClient.collections.list());
 
   const handlePopoverOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget as HTMLElement);
@@ -26,13 +26,9 @@ const Header = () => {
     setOpen(false);
   };
 
-  createEffect(() => {
-    const fetchCollections = async () => {
-      const res = await medusaClient.collections.list();
-      setCollections(res.collections as ICollection[]);
-    };
-    fetchCollections();
-  });
+  const collections = () => {
+    return collectionsQuery.data?.collections || []
+  }
 
   return (
     <AppBar position='fixed' sx={{ backgroundColor: '#FFF' }}>
@@ -72,7 +68,7 @@ const Header = () => {
               onClose={handlePopoverClose}>
               <For
                 each={collections()}
-                children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
+                children={(collection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
               />
             </Menu>
           </Grid>

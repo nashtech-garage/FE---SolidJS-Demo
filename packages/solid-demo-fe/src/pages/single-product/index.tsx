@@ -1,6 +1,6 @@
 import { For, createEffect, createSignal } from 'solid-js';
 import { useParams } from '@solidjs/router';
-import { Box, Grid, Button, Typography, styled, Container, Divider, ButtonGroup } from '@suid/material';
+import { Box, Grid, Button, Typography, styled, Container, Divider } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
 
 import { useCart } from '../../contexts';
@@ -43,8 +43,12 @@ function SingleProduct() {
     return '$' + (price * 0.1111 + price).toFixed(2);
   };
 
+  const product = () => {
+    return productQuery.data?.product
+  }
+
   createEffect(() => {
-    const variants = productQuery.data?.product.variants;
+    const variants = product()?.variants;
     if (variants && variants.length > 0) {
       setVariant(variants[0]);
     }
@@ -52,22 +56,22 @@ function SingleProduct() {
 
   return (
     <Container>
-      <PageTitleWrapper title={productQuery.data?.product?.title} />
+      <PageTitleWrapper title={product()?.title} />
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Box>
             <Box
               component='img'
               style={{ width: '100%', position: 'relative' }}
-              alt={productQuery.data?.product?.title}
-              src={productQuery.data?.product?.thumbnail || ''}
+              alt={product()?.title}
+              src={product()?.thumbnail || ''}
             />
           </Box>
         </Grid>
         <Grid item xs={8}>
           <Box sx={{ marginTop: '2rem' }}>
             <Typography variant='h6' color='#222' textTransform='uppercase'>
-              {productQuery.data?.product?.title}
+              {product()?.title}
             </Typography>
             <Box>
               <Typography color='#777' variant='caption' sx={{ textDecoration: 'line-through' }} fontSize='1rem'>
@@ -85,7 +89,7 @@ function SingleProduct() {
               <SectionTitle mb={1}>Select Size</SectionTitle>
               <ButtonSizeGroup>
                 <For
-                  each={productQuery.data?.product.variants}
+                  each={product()?.variants}
                   children={(item) => (
                     <SizeButton
                       onClick={() => setVariant(item)}
@@ -111,7 +115,7 @@ function SingleProduct() {
             <Divider />
             <SectionTitle mt={1}>Product Details</SectionTitle>
             <Typography color='#777' variant='caption'>
-              {productQuery.data?.product?.description}
+              {product()?.description}
             </Typography>
           </Box>
         </Grid>
@@ -119,12 +123,6 @@ function SingleProduct() {
     </Container>
   );
 }
-
-const ProductTitleWrapper = styled(Box)({
-  backgroundColor: '#f8f8f8',
-  padding: 32,
-  marginBottom: 32,
-});
 
 const QuantityBox = styled(Box)({
   paddingTop: 16,

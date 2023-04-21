@@ -2,14 +2,14 @@ import { Component, Accessor, splitProps, createSignal } from 'solid-js';
 import { Box, Typography, Grow, styled } from '@suid/material';
 import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
+import { Product } from '@medusajs/medusa/dist/models/product'
 
-import { IProduct } from '../../types';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
 import { useCart } from '../../contexts';
 
 
 interface ProductItemProps {
-  product: IProduct;
+  product: Product;
   index: Accessor<number>;
 }
 
@@ -39,7 +39,7 @@ const ProductItem: Component<ProductItemProps> = (props) => {
       <Container>
         <LinkStyled href={`/products/${product.id}`}>
           <ImageContainer onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <Image src={thumbnail} />
+            <Image src={thumbnail || undefined} />
             <ListOption classList={{ hovering: hovering() }}>
               <span>
                 <ShoppingCartOutlined onClick={addToCart} />

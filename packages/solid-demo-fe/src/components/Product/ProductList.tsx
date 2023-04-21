@@ -1,20 +1,20 @@
 //ProductList.jsx
-import { Accessor, For, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 import { Box, Typography } from '@suid/material';
+import { Product } from '@medusajs/medusa/dist/models/product'
 
 import { ProductItem } from './ProductItem';
-import { IProduct } from '../../types';
 
 interface ProductListProps {
-  list: Accessor<IProduct[]>;
+  list: Product[];
   containerClass?: string;
 }
 
-function ProductList({ list, containerClass }: ProductListProps) {
+function ProductList(props: ProductListProps) {
   return (
-    <Box sx={{ margin: { xs: '0', md: '0 2rem' } }} class={containerClass}>
+    <Box sx={{ margin: { xs: '0', md: '0 2rem' } }} class={props.containerClass}>
       <Show
-        when={list().length > 0}
+        when={props.list.length > 0}
         fallback={
           <Typography variant='body2' sx={{ display: 'flex', justifyContent: 'center' }}>
             There are no products
@@ -30,7 +30,7 @@ function ProductList({ list, containerClass }: ProductListProps) {
                 md: '1fr 1fr 1fr 1fr',
               },
             }}>
-            <For each={list()} children={(data, index) => <ProductItem product={data} index={index} />} />
+            <For each={props.list} children={(data, index) => <ProductItem product={data} index={index} />} />
           </Box>
         }
       />
