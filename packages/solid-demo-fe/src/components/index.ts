@@ -1,10 +1,8 @@
 export * from './Product';
-export * from './Snackbar';
-export * from './ServiceInfo';
+export { default as Snackbar } from './Snackbar';
 export * from './Slider';
-export * from './HeroBanner';
 export * from './Logo';
 export * from './PageTitleWrapper';
-export * from './BrandList';
 export * from './Section';
 export * from './CounterButton';
+export { default as Section } from './Section';

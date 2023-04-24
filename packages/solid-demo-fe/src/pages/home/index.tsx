@@ -1,12 +1,15 @@
-import { Product, ServiceInfo, HeroBanner, BrandList } from '../../components';
+import { Section } from '../../components';
 
 function Home() {
   return (
     <>
-      <HeroBanner />
-      <Product.Featured />
-      <ServiceInfo />
-      <BrandList />
+      <Section.HeroBanner />
+      <Section.Discount />
+      <Section.NewProducts />
+      <Section.FashionTrends />
+      <Section.FeaturedProducts />
+      <Section.ServiceInfo />
+      <Section.BrandList />
     </>
   );
 }

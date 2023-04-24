@@ -1,13 +1,10 @@
 /* @refresh reload */
 import { render } from 'solid-js/web';
 import { Router } from '@solidjs/router';
-import { ThemeProvider } from '@suid/material';
 
 import './assets/scss/root.scss';
 import App from './App';
-import { themeConfig } from './theme';
-import { SnackbarProvider } from './providers';
-import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
+import { AppProvider } from './providers';
 
 const root = document.getElementById('root');
 
@@ -17,19 +14,13 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-const queryClient = new QueryClient();
-
 render(
   () => (
-    <ThemeProvider theme={themeConfig}>
-      <SnackbarProvider>
-        <QueryClientProvider client={queryClient}>
-          <Router>
-            <App />
-          </Router>
-        </QueryClientProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+    <AppProvider>
+      <Router>
+        <App />
+      </Router>
+    </AppProvider>
   ),
   root!
 );

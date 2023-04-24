@@ -1,8 +1,8 @@
 import { Component, For, createEffect, createSignal } from 'solid-js';
 import { Box, styled, useMediaQuery, useTheme } from '@suid/material';
 
-import { BRAND_ICONS } from '../constants';
-import { Slider } from './Slider';
+import { BRAND_ICONS } from '../../constants';
+import { Slider } from '../Slider';
 import { Section } from './Section';
 
 const BrandList: Component = () => {
