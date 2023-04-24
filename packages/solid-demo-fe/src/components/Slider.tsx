@@ -1,4 +1,4 @@
-import { JSX, Component, For } from 'solid-js';
+import { JSX, ParentComponent, For } from 'solid-js';
 import { createSlider } from 'solid-slider';
 import { Box, IconButton, styled } from '@suid/material';
 import {
@@ -15,7 +15,7 @@ interface SliderProps {
   dotContainerClass?: string;
 }
 
-const Slider: Component<SliderProps> = ({ children, perView = 1, spacing = 0, totalItems, dotContainerClass }) => {
+const Slider: ParentComponent<SliderProps> = ({ children, perView = 1, spacing = 0, totalItems, dotContainerClass }) => {
   const [slider, { next, prev, current }] = createSlider({
     slides: {
       perView,

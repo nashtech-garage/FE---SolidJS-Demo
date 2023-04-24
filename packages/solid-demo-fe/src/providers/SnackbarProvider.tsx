@@ -56,9 +56,9 @@ const SnackbarProvider = (props: SnackbarProviderProps): JSX.Element => {
     <SnackbarContext.Provider value={valueProvider()}>
       {props.children}
       <Portal mount={document.body}>
-        <Snackbar.Container>
+        <Snackbar>
           <For each={queue()} children={(s) => <Snackbar.Item {...s} onClose={shift} />} />
-        </Snackbar.Container>
+        </Snackbar>
       </Portal>
     </SnackbarContext.Provider>
   );

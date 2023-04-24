@@ -2,13 +2,14 @@ import { Component } from 'solid-js';
 import { Box, Button, Typography, Grid, styled } from '@suid/material';
 import { Link } from '@solidjs/router';
 
-import { Slider } from './Slider';
-import heroBg1 from '../assets/images/hero-banner-1.jpg';
-import heroBg2 from '../assets/images/hero-banner-2.jpg';
+import { Slider } from '../Slider';
+import { SectionFull } from './Section';
+import heroBg1 from '../../assets/images/hero-banner-1.jpg';
+import heroBg2 from '../../assets/images/hero-banner-2.jpg';
 
 const HeroBanner: Component = () => {
   return (
-    <Box component='section'>
+    <SectionFull>
       <Slider totalItems={2} dotContainerClass='hero-dot-container'>
         <Box class='hero-item'>
           <ItemStyled
@@ -47,7 +48,7 @@ const HeroBanner: Component = () => {
           </ItemStyled>
         </Box>
       </Slider>
-    </Box>
+    </SectionFull>
   );
 };
 

@@ -17,7 +17,7 @@ function SubHeader() {
       <LeftBoxStyled item xs={6} md={6}>
         <WelcomeTextStyled>Welcome to NT Store</WelcomeTextStyled>
         <CallUsTextStyled>
-          <LocalPhoneIconStyled />
+          <LocalPhoneIconStyled fontSize='inherit' />
           Call Us: 123-456-7890
         </CallUsTextStyled>
       </LeftBoxStyled>
@@ -101,7 +101,7 @@ const LeftBoxStyled = styled(Grid)({
 });
 
 const LocalPhoneIconStyled = styled(LocalPhoneIcon)(({ theme }) => ({
-  fontSize: 15,
+  fontSize: '15px !important',
   marginRight: 4,
   color: theme.palette.primary.main,
   [theme.breakpoints.up('md')]: {
