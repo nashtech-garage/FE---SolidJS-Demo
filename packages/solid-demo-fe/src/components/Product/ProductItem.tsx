@@ -2,14 +2,14 @@ import { Component, Accessor, splitProps, createSignal } from 'solid-js';
 import { Box, Typography, Grow, styled } from '@suid/material';
 import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
+import { Product } from '@medusajs/medusa';
 
-import { IProduct } from '../../types';
 import { addProduct, getProductPrice } from '../../utils/productHelper';
-import { useCart } from '../../contexts';
+import { CartAction, dispatchCart } from '../../store';
 
 
 interface ProductItemProps {
-  product: IProduct;
+  product: Product;
   index: Accessor<number>;
 }
 
@@ -18,12 +18,11 @@ const StarStyled = () => <Star sx={{ fontSize: '0.8rem', color: '#EDB867' }} />;
 const ProductItem: Component<ProductItemProps> = (props) => {
   const [hovering, setHovering] = createSignal(false);
   const [{ product, index }] = splitProps(props, ['product', 'index']);
-  const { updateCart } = useCart();
   const { title, thumbnail } = product;
 
   const addToCart = (event: MouseEvent) => {
     event.preventDefault();
-    addProduct(product.variants[0].id, 1, updateCart);
+    addProduct(product.variants[0].id, 1, (updated) => dispatchCart(CartAction.SetCart, updated));
   };
 
   const addToFavorite = () => {
@@ -39,7 +38,7 @@ const ProductItem: Component<ProductItemProps> = (props) => {
       <Container>
         <LinkStyled href={`/products/${product.id}`}>
           <ImageContainer onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <Image src={thumbnail} />
+            <Image src={thumbnail || undefined} />
             <ListOption classList={{ hovering: hovering() }}>
               <span>
                 <ShoppingCartOutlined onClick={addToCart} />

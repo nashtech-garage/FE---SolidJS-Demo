@@ -1,36 +1,26 @@
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { Typography, ToggleButton, ToggleButtonGroup, styled } from '@suid/material';
+import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../../utils';
-import { IProductType, IProduct } from '../../types';
 import { ProductList } from './ProductList';
 import { Section } from '../Section';
 
 const FeaturedProducts = () => {
-  const [products, setProducts] = createSignal<IProduct[]>([]);
-  const [productTypes, setProductTypes] = createSignal<IProductType[]>([]);
   const [selected, setSelected] = createSignal<string>('all');
+  const productsQuery = createQuery(() => ['products', selected()], () => medusaClient.products.list({
+    limit: 8,
+    ...(selected() !== 'all' && { type_id: [selected()] }),
+  }))
+  const productTypesQuery = createQuery(() => [], () => medusaClient.productTypes.list())
 
-  createEffect(() => {
-    const query = {
-      limit: 8,
-      ...(selected() !== 'all' && { type_id: [selected()] }),
-    };
-    const fetchProducts = async () => {
-      const res = await medusaClient.products.list(query);
-      setProducts(res.products as IProduct[]);
-    };
+  const products = () => {
+    return productsQuery.data?.products || []
+  }
 
-    fetchProducts();
-  });
-
-  createEffect(() => {
-    const fetchProductTypes = async () => {
-      const res = await medusaClient.productTypes.list();
-      setProductTypes(res.product_types as IProductType[]);
-    };
-    fetchProductTypes();
-  });
+  const productTypes = () => {
+    return productTypesQuery.data?.product_types || []
+  }
 
   const handleSelectProductType = (e: MouseEvent, newVal: string | null) => {
     if (newVal) {
@@ -51,14 +41,14 @@ const FeaturedProducts = () => {
           <ToggleButton value='all'>All</ToggleButton>
           <For
             each={productTypes()}
-            children={(productType: IProductType) => (
+            children={(productType) => (
               <ToggleButton value={productType.id} aria-label='productType.value'>
                 {productType.value}
               </ToggleButton>
             )}
           />
         </ToggleButtonGroupStyled>
-        <ProductList list={products} />
+        <ProductList list={products()} />
       </Section>
     </>
   );

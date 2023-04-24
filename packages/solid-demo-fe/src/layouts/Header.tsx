@@ -1,20 +1,24 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled, Typography } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import { Settings as SettingsIcon, Search as SearchIcon } from '@suid/icons-material';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { Link } from '@solidjs/router';
+import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../utils/medusaClient';
-import { useCart } from '../contexts';
-import { ICollection } from '../types';
+import { cartStore } from '../store';
 import { SubHeader } from './SubHeader';
 import { Logo } from '../components';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
   const [open, setOpen] = createSignal<boolean>(false);
-  const [collections, setCollections] = createSignal<ICollection[]>([]);
-  const { cart } = useCart();
+  const cart = () => cartStore.cart
+
+  const collectionsQuery = createQuery(
+    () => ['collections'],
+    () => medusaClient.collections.list()
+  );
 
   const handlePopoverOpen = (event: MouseEvent) => {
     setAnchorEl(event.currentTarget as HTMLElement);
@@ -26,13 +30,9 @@ const Header = () => {
     setOpen(false);
   };
 
-  createEffect(() => {
-    const fetchCollections = async () => {
-      const res = await medusaClient.collections.list();
-      setCollections(res.collections as ICollection[]);
-    };
-    fetchCollections();
-  });
+  const collections = () => {
+    return collectionsQuery.data?.collections || [];
+  };
 
   return (
     <AppBar position='fixed' sx={{ backgroundColor: '#FFF' }}>
@@ -49,19 +49,27 @@ const Header = () => {
             xs={0}
             md={6}
             sx={{ display: { md: 'flex', xs: 'none' }, justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-            <LinkStyled href='/'>Home</LinkStyled>
-            <LinkStyled href='/products'>Products</LinkStyled>
-            <LinkStyled href='#'>Pages</LinkStyled>
-            <LinkStyled href='#'>Blogs</LinkStyled>
-            <LinkStyled
+            <LinkStyled href='/'>
+              <HeaderTextItem>Home</HeaderTextItem>
+            </LinkStyled>
+            <LinkStyled href='/products'>
+              <HeaderTextItem>Products</HeaderTextItem>
+            </LinkStyled>
+            <LinkStyled href='#'>
+              <HeaderTextItem>Pages</HeaderTextItem>
+            </LinkStyled>
+            <LinkStyled href='#'>
+              <HeaderTextItem>Blogs</HeaderTextItem>
+            </LinkStyled>
+            <HeaderTextItem
+              sx={{ cursor: 'pointer' }}
               id='collection-btn'
               aria-controls={open() ? 'basic-menu' : undefined}
               aria-expanded={open() ? 'true' : undefined}
               aria-haspopup='true'
-              onClick={handlePopoverOpen}
-              href='#'>
+              onClick={handlePopoverOpen}>
               Collections
-            </LinkStyled>
+            </HeaderTextItem>
             <Menu
               id='collection-menu'
               open={open()}
@@ -72,7 +80,7 @@ const Header = () => {
               onClose={handlePopoverClose}>
               <For
                 each={collections()}
-                children={(collection: ICollection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
+                children={(collection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
               />
             </Menu>
           </Grid>
@@ -100,9 +108,7 @@ const Header = () => {
 };
 
 const LinkStyled = styled(Link)({
-  color: '#777',
   textDecoration: 'none',
-  fontSize: 16,
 });
 
 const CartContainer = styled(Box)({
@@ -110,6 +116,12 @@ const CartContainer = styled(Box)({
   justifyContent: 'flex-end',
   alignItems: 'center',
   height: '100%',
+});
+
+const HeaderTextItem = styled(Typography)({
+  fontSize: 14,
+  color: '#222',
+  textTransform: 'uppercase',
 });
 
 export { Header };

@@ -1,23 +1,19 @@
-import { createSignal, createEffect } from 'solid-js';
 import { Container } from '@suid/material';
+import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../../utils';
-import { IProduct } from '../../types';
 import { Product } from '../../components';
 
 function Products() {
-  const [products, setProducts] = createSignal<IProduct[]>([]);
-  createEffect(() => {
-    const fetchProducts = async () => {
-      const res = await medusaClient.products.list();
-      setProducts(res.products as IProduct[]);
-    };
+  const productsQuery = createQuery(() => ['products'], () => medusaClient.products.list())
 
-    fetchProducts();
-  });
+  const products = () => {  
+    return productsQuery.data?.products || []
+  }
+
   return (
     <Container>
-      <Product.List list={products} />
+      <Product.List list={products()} />
     </Container>
   );
 }

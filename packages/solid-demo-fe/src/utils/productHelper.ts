@@ -1,3 +1,5 @@
+import { ProductVariant } from '@medusajs/medusa';
+import { ICart } from '../types/Cart';
 import { medusaClient } from './medusaClient';
 
 export function formatPrice(price?: number | null) {
@@ -5,7 +7,7 @@ export function formatPrice(price?: number | null) {
   return '$' + (price / 100).toFixed(2);
 }
 
-export function getProductPrice(variant?: { prices: any[] }) {
+export function getProductPrice(variant?: ProductVariant) {
   const usdPriceIndex = 1;
   if (variant) {
     return formatPrice(variant.prices[usdPriceIndex].amount);
@@ -28,7 +30,7 @@ async function createCart() {
   }
 }
 
-export async function addProduct(variantId: string, quantity: number, onCartChange: (cart: any) => void) {
+export async function addProduct(variantId: string, quantity: number, onCartChange: (cart: ICart) => void) {
   let cartId = localStorage.getItem('cartId');
 
   // Init cart
