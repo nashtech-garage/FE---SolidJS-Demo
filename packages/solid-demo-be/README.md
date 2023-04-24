@@ -2,7 +2,9 @@
 
 
 ## Require:
+
  + Node: 16
+
 ## Getting started
 
 ### Install Medusa CLI
@@ -77,6 +79,7 @@ STORE_CORS=http://localhost:8000
 ```
 
 ## After complete steps above, you can run
+
 ```
 yarn start
 ```
@@ -86,6 +89,7 @@ npm start
 ```
 
 ## Init DB
+
 ```
 yarn seed
 ```
