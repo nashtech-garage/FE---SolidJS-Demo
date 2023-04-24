@@ -1,17 +1,6 @@
 import { createStore } from 'solid-js/store';
-import { ICart } from '../../types/Cart';
 import { medusaClient } from '../../utils';
-
-enum CartAction {
-  GetCart,
-  SetCart,
-  ClearCart,
-}
-
-interface CartState {
-  cart?: ICart;
-  loading: boolean;
-}
+import { CartAction, CartState } from './types';
 
 const initialState: CartState = {
   cart: undefined,
