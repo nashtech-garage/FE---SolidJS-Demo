@@ -4,64 +4,99 @@ import LocalPhoneIcon from '@suid/icons-material/LocalPhone';
 import FavoriteIcon from '@suid/icons-material/Favorite';
 import PersonIcon from '@suid/icons-material/Person';
 import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown';
+import { customerLogout, getCurrentCustomer } from '../utils/authenticationHelper';
+import { RegisterForm } from '../components/Authentication/Register';
+import { useNavigate } from '@solidjs/router';
+
+export const [isLoggin, setIsLoggin] = createSignal(false);
 
 function SubHeader() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null);
   const open = () => Boolean(anchorEl());
+  const [openDialog, setOpenDialog] = createSignal(false);
+  const navigate = useNavigate();
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  getCurrentCustomer().then((value) => {
+    setIsLoggin(true);
+  });
 
   return (
-    <ContainerStyled container>
-      <LeftBoxStyled item xs={6} md={6}>
-        <WelcomeTextStyled>Welcome to NT Store</WelcomeTextStyled>
-        <CallUsTextStyled>
-          <LocalPhoneIconStyled fontSize='inherit' />
-          Call Us: 123-456-7890
-        </CallUsTextStyled>
-      </LeftBoxStyled>
-      <ToolBoxStyled item xs={6} md={6}>
-        <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
-        <ButtonStyled
-          startIcon={<PersonIcon />}
-          endIcon={<KeyboardArrowDownIcon />}
-          id='my-account-button'
-          aria-controls={open() ? 'my-account-menu' : undefined}
-          aria-haspopup='true'
-          aria-expanded={open() ? 'true' : undefined}
-          onClick={(event) => {
-            setAnchorEl(event.currentTarget);
-          }}>
-          My Account
-        </ButtonStyled>
-        {/* Mobile view */}
-        <IconButtonStyled size='small'>
-          <FavoriteIcon fontSize='inherit' />
-        </IconButtonStyled>
-        <IconButtonStyled
-          size='small'
-          id='my-account-button'
-          aria-controls={open() ? 'my-account-menu' : undefined}
-          aria-haspopup='true'
-          aria-expanded={open() ? 'true' : undefined}
-          onClick={(event) => {
-            setAnchorEl(event.currentTarget);
-          }}>
-          <PersonIcon fontSize='inherit' />
-        </IconButtonStyled>
-        <Menu
-          id='my-account-menu'
-          anchorEl={anchorEl()}
-          open={open()}
-          onClose={handleClose}
-          MenuListProps={{ 'aria-labelledby': 'my-account-button' }}>
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
-      </ToolBoxStyled>
-    </ContainerStyled>
+    <>
+      <ContainerStyled container>
+        <LeftBoxStyled item xs={6} md={6}>
+          <WelcomeTextStyled>Welcome to NT Store</WelcomeTextStyled>
+          <CallUsTextStyled>
+            <LocalPhoneIconStyled fontSize='inherit' />
+            Call Us: 123-456-7890
+          </CallUsTextStyled>
+        </LeftBoxStyled>
+        <ToolBoxStyled item xs={6} md={6}>
+          <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
+          {isLoggin() ? (
+            <ButtonStyled
+              startIcon={<PersonIcon />}
+              endIcon={<KeyboardArrowDownIcon />}
+              id='my-account-button'
+              aria-controls={open() ? 'my-account-menu' : undefined}
+              aria-haspopup='true'
+              aria-expanded={open() ? 'true' : undefined}
+              onClick={(event) => {
+                setAnchorEl(event.currentTarget);
+              }}>
+              My Account
+            </ButtonStyled>
+          ) : (
+            <ButtonStyled onClick={handleClickOpenDialog}>Log in</ButtonStyled>
+          )}
+
+          {/* Mobile view */}
+          <IconButtonStyled size='small'>
+            <FavoriteIcon fontSize='inherit' />
+          </IconButtonStyled>
+          <IconButtonStyled
+            size='small'
+            id='my-account-button'
+            aria-controls={open() ? 'my-account-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open() ? 'true' : undefined}
+            onClick={(event) => {
+              setAnchorEl(event.currentTarget);
+            }}>
+            <PersonIcon fontSize='inherit' />
+          </IconButtonStyled>
+          <Menu
+            id='my-account-menu'
+            anchorEl={anchorEl()}
+            open={open()}
+            onClose={handleClose}
+            MenuListProps={{ 'aria-labelledby': 'my-account-button' }}>
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate('/my-profile/detail');
+              }}>
+              My account
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                customerLogout();
+              }}>
+              Logout
+            </MenuItem>
+          </Menu>
+        </ToolBoxStyled>
+      </ContainerStyled>
+      <RegisterForm open={openDialog()} onClose={handleCloseDialog} />
+    </>
   );
 }
 

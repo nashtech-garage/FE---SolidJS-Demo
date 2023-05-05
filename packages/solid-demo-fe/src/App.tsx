@@ -3,12 +3,13 @@ import { Routes, Route } from '@solidjs/router';
 
 import { MainLayout } from './layouts';
 import { CartAction, dispatchCart } from './store';
+import RouteGuard from './route-guard/RouteGuard';
 
 const Products = lazy(() => import('./pages/products'));
 const Home = lazy(() => import('./pages/home'));
 const SingleProduct = lazy(() => import('./pages/single-product'));
 const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
-
+const ProfileDetails = lazy(() => import('./pages/my-profile/detail'));
 function App() {
   onMount(() => {
     dispatchCart(CartAction.GetCart);
@@ -22,6 +23,9 @@ function App() {
         <Route path='/products/:productId' component={SingleProduct} />
         <Route path='/shopping-cart' component={ShoppingCart} />
       </Route>
+      <Route path="/my-profile" component={RouteGuard}>
+          <Route path="/my-profile/detail" component={ProfileDetails} />
+        </Route>
     </Routes>
   );
 }
