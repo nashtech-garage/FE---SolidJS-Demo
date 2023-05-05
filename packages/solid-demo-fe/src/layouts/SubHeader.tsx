@@ -4,16 +4,32 @@ import LocalPhoneIcon from '@suid/icons-material/LocalPhone';
 import FavoriteIcon from '@suid/icons-material/Favorite';
 import PersonIcon from '@suid/icons-material/Person';
 import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown';
+import { customerLogout, getCurrentCustomer } from '../utils/authenticationHelper';
+import { RegisterForm } from '../components/Authentication/Register';
+import { useNavigate } from '@solidjs/router';
+
+export const [isLoggin, setIsLoggin] = createSignal(false);
 
 function SubHeader() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null);
   const open = () => Boolean(anchorEl());
+  const [openDialog, setOpenDialog] = createSignal(false);
+  const navigate = useNavigate()
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  getCurrentCustomer().then(value => {
+    setIsLoggin(true)})
+  
   return (
-    <ContainerStyled container>
+    <><ContainerStyled container>
       <LeftBoxStyled item xs={6} md={6}>
         <WelcomeTextStyled>Welcome to NT Store</WelcomeTextStyled>
         <CallUsTextStyled>
@@ -23,7 +39,7 @@ function SubHeader() {
       </LeftBoxStyled>
       <ToolBoxStyled item xs={6} md={6}>
         <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
-        <ButtonStyled
+        {isLoggin() ? <ButtonStyled
           startIcon={<PersonIcon />}
           endIcon={<KeyboardArrowDownIcon />}
           id='my-account-button'
@@ -32,9 +48,11 @@ function SubHeader() {
           aria-expanded={open() ? 'true' : undefined}
           onClick={(event) => {
             setAnchorEl(event.currentTarget);
-          }}>
+          } }>
           My Account
-        </ButtonStyled>
+        </ButtonStyled> : <ButtonStyled onClick={handleClickOpenDialog}>Log in</ButtonStyled>}
+
+
         {/* Mobile view */}
         <IconButtonStyled size='small'>
           <FavoriteIcon fontSize='inherit' />
@@ -47,7 +65,7 @@ function SubHeader() {
           aria-expanded={open() ? 'true' : undefined}
           onClick={(event) => {
             setAnchorEl(event.currentTarget);
-          }}>
+          } }>
           <PersonIcon fontSize='inherit' />
         </IconButtonStyled>
         <Menu
@@ -57,11 +75,18 @@ function SubHeader() {
           onClose={handleClose}
           MenuListProps={{ 'aria-labelledby': 'my-account-button' }}>
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={()=>{
+            navigate("/my-profile/detail")
+          }}>My account</MenuItem>
+          <MenuItem onClick={()=>{
+            customerLogout()
+          }}>Logout</MenuItem>
         </Menu>
       </ToolBoxStyled>
     </ContainerStyled>
+    <RegisterForm
+        open={openDialog()}
+        onClose={handleCloseDialog} /></>
   );
 }
 
