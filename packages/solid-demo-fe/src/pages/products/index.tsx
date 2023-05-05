@@ -2,7 +2,6 @@ import { Container } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../../utils';
-// import { Product } from '../../components/Product';
 import { ProductList } from '../../components';
 
 function Products() {
