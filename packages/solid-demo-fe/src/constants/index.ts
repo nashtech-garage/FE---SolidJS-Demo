@@ -11,6 +11,8 @@ import Instagram from '../assets/icons/instagram.svg';
 import Twitter from '../assets/icons/twitter.svg';
 
 export * from './footer';
+export * from './snackbarMessage';
+export * from './alert';
 
 export const BRAND_ICONS = [
   {

@@ -1,33 +1,40 @@
-import { createSignal } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 import { Button, Grid, Menu, MenuItem, Typography, IconButton, styled } from '@suid/material';
-import LocalPhoneIcon from '@suid/icons-material/LocalPhone';
-import FavoriteIcon from '@suid/icons-material/Favorite';
-import PersonIcon from '@suid/icons-material/Person';
-import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown';
-import { customerLogout, getCurrentCustomer } from '../utils/authenticationHelper';
-import { RegisterForm } from '../components/Authentication/Register';
+import {
+  LocalPhone as LocalPhoneIcon,
+  Favorite as FavoriteIcon,
+  Person as PersonIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  Login as LoginIcon,
+} from '@suid/icons-material';
 import { useNavigate } from '@solidjs/router';
+
+import { authStore } from '../store';
+import { ModalType } from '../store/auth/types';
+import { useSnackbar } from '../contexts';
+import { SNACKBAR_MESSAGE } from '../constants';
 
 export const [isLoggin, setIsLoggin] = createSignal(false);
 
-function SubHeader() {
+const SubHeader = () => {
+  const { pushSnackbar } = useSnackbar();
+  const { authState, actions } = authStore;
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null);
   const open = () => Boolean(anchorEl());
-  const [openDialog, setOpenDialog] = createSignal(false);
   const navigate = useNavigate();
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
-  };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const handleClickOpenDialog = () => actions.setModalState({ ...authState.state, type: ModalType.Login });
+
+  const onLogoutSuccess = () => pushSnackbar(...SNACKBAR_MESSAGE.LOGOUT_SUCCESS);
+  const handleLogout = () => {
+    actions.logout({ onLogoutSuccess });
+    handleClose();
   };
-  getCurrentCustomer().then((value) => {
-    setIsLoggin(true);
-  });
+  const handleGoToAccount = () => navigate('/my-profile/detail');
 
   return (
     <>
@@ -41,7 +48,13 @@ function SubHeader() {
         </LeftBoxStyled>
         <ToolBoxStyled item xs={6} md={6}>
           <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
-          {isLoggin() ? (
+          <Show
+            when={!!authState.user}
+            fallback={
+              <ButtonStyled onClick={handleClickOpenDialog} startIcon={<LoginIcon />}>
+                Log in
+              </ButtonStyled>
+            }>
             <ButtonStyled
               startIcon={<PersonIcon />}
               endIcon={<KeyboardArrowDownIcon />}
@@ -54,9 +67,7 @@ function SubHeader() {
               }}>
               My Account
             </ButtonStyled>
-          ) : (
-            <ButtonStyled onClick={handleClickOpenDialog}>Log in</ButtonStyled>
-          )}
+          </Show>
 
           {/* Mobile view */}
           <IconButtonStyled size='small'>
@@ -80,25 +91,14 @@ function SubHeader() {
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'my-account-button' }}>
             <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem
-              onClick={() => {
-                navigate('/my-profile/detail');
-              }}>
-              My account
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                customerLogout();
-              }}>
-              Logout
-            </MenuItem>
+            <MenuItem onClick={handleGoToAccount}>My account</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </ToolBoxStyled>
       </ContainerStyled>
-      <RegisterForm open={openDialog()} onClose={handleCloseDialog} />
     </>
   );
-}
+};
 
 const ContainerStyled = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
