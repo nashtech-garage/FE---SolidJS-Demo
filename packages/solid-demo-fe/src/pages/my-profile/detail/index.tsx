@@ -13,7 +13,7 @@ function ProfileDetails() {
     return (
         <Card sx={{ maxWidth: 270, margin: "0 auto" }}>
             <CardMedia
-                sx={{ height: 270}}
+                sx={{ height: 270 }}
                 image='/src/assets/images/user.jpg'
                 title="user image"
             />

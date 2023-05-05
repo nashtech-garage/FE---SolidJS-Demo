@@ -1,8 +1,5 @@
-
-
-
-import { createEffect } from "solid-js";
-import { Outlet, useNavigate } from "@solidjs/router";
+import { createEffect } from 'solid-js';
+import { Outlet, useNavigate } from '@solidjs/router';
 export default function RouteGuard() {
     const navigate = useNavigate();
     const customerId = sessionStorage.getItem('customerId');
@@ -11,11 +8,10 @@ export default function RouteGuard() {
         if (!customerId) {
             navigate('/', { replace: true });
         }
-    })
+    });
     return (
         <div>
             <Outlet />
         </div>
-    )
+    );
 }
-
