@@ -9,6 +9,7 @@ import { medusaClient } from '../utils/medusaClient';
 import { cartStore } from '../store';
 import { SubHeader } from './SubHeader';
 import { Logo, Drawer } from '../components';
+import { LoginModal, RegisterModal } from '../modals';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
@@ -103,12 +104,6 @@ const Header = () => {
                 <IconButton>
                   <SettingsIcon />
                 </IconButton>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
                 <Link href='/shopping-cart'>
                   <IconButton>
                     <Badge badgeContent={cart()?.items.length} color='primary'>
@@ -122,6 +117,8 @@ const Header = () => {
         </Toolbar>
       </AppBar>
       <Drawer open={isOpenDrawer()} handleClose={() => setOpenDrawer(false)} />
+      <LoginModal />
+      <RegisterModal />
     </>
   );
 };

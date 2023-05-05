@@ -1,8 +1,10 @@
 import { For } from 'solid-js';
-import { Box, Container, Divider, Typography, styled } from '@suid/material';
+import { Box, Container, Divider, styled } from '@suid/material';
+
 import { MailSubscribe } from './MailSubscribe';
 import { MainContent } from './MainContent';
 import { PAYMENT_LIST } from '../../constants';
+import { CopyrightText } from '../../components';
 
 function Footer() {
   return (
@@ -14,7 +16,7 @@ function Footer() {
       </Container>
       <ContainerWhiteStyled>
         <ContainerWrapperStyled maxWidth='xl'>
-          <CopyrightText>© Create by FE-Team</CopyrightText>
+          <CopyrightText />
           <PaymentListStyled>
             <For each={PAYMENT_LIST} children={(item) => <PaymentImgStyled component='img' {...item} />} />
           </PaymentListStyled>
@@ -38,12 +40,6 @@ const ContainerWrapperStyled = styled(Container)({
   alignItems: 'center',
   paddingBlock: 16,
 });
-
-const CopyrightText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.grey[600],
-  fontSize: 16,
-  letterSpacing: 0.5,
-}));
 
 const PaymentListStyled = styled(Box)({
   display: 'flex',

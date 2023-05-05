@@ -24,6 +24,7 @@ const SnackbarProvider = (props: SnackbarProviderProps): JSX.Element => {
   const { maxSnack = 3 } = props;
   const push = (message: string, variant?: 'success' | 'warning' | 'error', title?: string, delay = 3000) => {
     const newQueue = { message, delay, id: uuidv4(), variant, title };
+
     setQueue((prevQueue: SnackbarProps[]) => {
       if (prevQueue.length < maxSnack) {
         return [...prevQueue, newQueue];

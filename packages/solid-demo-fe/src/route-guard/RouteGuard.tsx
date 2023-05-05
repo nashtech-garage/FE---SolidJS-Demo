@@ -1,17 +1,15 @@
 import { createEffect } from 'solid-js';
 import { Outlet, useNavigate } from '@solidjs/router';
+import { authStore } from '../store';
 export default function RouteGuard() {
-    const navigate = useNavigate();
-    const customerId = sessionStorage.getItem('customerId');
-
-    createEffect(() => {
-        if (!customerId) {
-            navigate('/', { replace: true });
-        }
-    });
-    return (
-        <div>
-            <Outlet />
-        </div>
-    );
+  const {
+    authState: { user },
+  } = authStore;
+  const navigate = useNavigate();
+  createEffect(() => {
+    if (!user) {
+      navigate('/', { replace: true });
+    }
+  });
+  return <Outlet />;
 }
