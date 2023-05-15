@@ -49,7 +49,7 @@ const Header = () => {
               <LinkStyled href='#'>
                 <HeaderTextItem>Blogs</HeaderTextItem>
               </LinkStyled>
-              <LinkStyled href='/collection'>
+              <LinkStyled href='/collections'>
                 <HeaderTextItem>Collections</HeaderTextItem>
               </LinkStyled>
             </Grid>

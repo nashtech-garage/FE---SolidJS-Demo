@@ -1,5 +1,5 @@
-import { For } from 'solid-js';
-import { Container, Grid } from '@suid/material';
+import { For, Match, Switch } from 'solid-js';
+import { Container, Grid, Typography } from '@suid/material';
 import { createQuery } from '@tanstack/solid-query';
 
 import { medusaClient } from '../../utils';
@@ -23,14 +23,14 @@ const CollectionImages = [
   CollectionImage6,
 ];
 
-function Colllection() {
-  const productsQuery = createQuery(
+function Colllections() {
+  const collectionsQuery = createQuery(
     () => ['collections'],
     () => medusaClient.collections.list()
   );
 
   const products = () => {
-    return (productsQuery.data?.collections || []).map((collection, index) => ({
+    return (collectionsQuery.data?.collections || []).map((collection, index) => ({
       ...collection,
       imgURL: CollectionImages[index % 7],
     }));
@@ -39,16 +39,26 @@ function Colllection() {
   return (
     <Container class='section-top-space section-bottom-space'>
       <Grid container spacing={3}>
-        <For
-          each={products()}
-          children={(collection) => (
-            <Grid item xs={12} sm={6} xl={3}>
-              <CollectionItem title={collection.title} imgURL={collection.imgURL}/>
-            </Grid>
-          )}></For>
+        <Switch>
+          <Match when={collectionsQuery.isLoading}>
+            <Typography variant='caption'>Loading data...</Typography>
+          </Match>
+          <Match when={collectionsQuery.isError}>
+            <Typography variant='caption'>{JSON.stringify(collectionsQuery.error)}</Typography>
+          </Match>
+          <Match when={collectionsQuery.isSuccess}>
+            <For
+              each={products()}
+              children={(collection) => (
+                <Grid item xs={12} sm={6} xl={3}>
+                  <CollectionItem title={collection.title} imgURL={collection.imgURL} />
+                </Grid>
+              )}></For>
+          </Match>
+        </Switch>
       </Grid>
     </Container>
   );
 }
 
-export default Colllection;
+export default Colllections;
