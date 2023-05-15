@@ -14,11 +14,15 @@ const CollectionItem: Component<ICollectionItemProps> = ({ title, imgURL }) => {
         <Typography variant='h5' gutterBottom>
           <b>{title.toLocaleUpperCase()}</b>
         </Typography>
-        <Typography variant='subtitle2' gutterBottom>Lorem Ipsum is simply dummy text of the printing and typesetting industry....</Typography>
-        <A href="/products"><Button variant='outlined'>SHOP NOW</Button></A>
+        <Typography variant='subtitle2' sx={{ marginBottom: '0.6em' }}>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry....
+        </Typography>
+        <A href='/products'>
+          <Button variant='outlined'>SHOP NOW</Button>
+        </A>
       </div>
     </div>
   );
-}; 
+};
 
 export default CollectionItem;
