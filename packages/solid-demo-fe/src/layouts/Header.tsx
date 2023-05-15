@@ -1,40 +1,16 @@
-import { IconButton, AppBar, Toolbar, Box, Grid, Menu, MenuItem, Badge, styled, Typography } from '@suid/material';
+import { IconButton, AppBar, Toolbar, Box, Grid, Badge, styled, Typography } from '@suid/material';
 import ShoppingCartIcon from '@suid/icons-material/ShoppingCart';
 import { Settings as SettingsIcon, Search as SearchIcon, Menu as MenuIcon } from '@suid/icons-material';
-import { createSignal, For } from 'solid-js';
+import { createSignal } from 'solid-js';
 import { Link } from '@solidjs/router';
-import { createQuery } from '@tanstack/solid-query';
 
-import { medusaClient } from '../utils/medusaClient';
 import { cartStore } from '../store';
 import { SubHeader } from './SubHeader';
 import { Logo, Drawer } from '../components';
-import { LoginModal, RegisterModal } from '../modals';
 
 const Header = () => {
-  const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
-  const [open, setOpen] = createSignal<boolean>(false);
   const [isOpenDrawer, setOpenDrawer] = createSignal(false);
   const cart = () => cartStore.cart;
-
-  const collectionsQuery = createQuery(
-    () => ['collections'],
-    () => medusaClient.collections.list()
-  );
-
-  const handlePopoverOpen = (event: MouseEvent) => {
-    setAnchorEl(event.currentTarget as HTMLElement);
-    setOpen(true);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-    setOpen(false);
-  };
-
-  const collections = () => {
-    return collectionsQuery.data?.collections || [];
-  };
 
   const handleOpenDrawer = () => {
     setOpenDrawer(true);
@@ -73,31 +49,18 @@ const Header = () => {
               <LinkStyled href='#'>
                 <HeaderTextItem>Blogs</HeaderTextItem>
               </LinkStyled>
-              <HeaderTextItem
-                sx={{ cursor: 'pointer' }}
-                id='collection-btn'
-                aria-controls={open() ? 'basic-menu' : undefined}
-                aria-expanded={open() ? 'true' : undefined}
-                aria-haspopup='true'
-                onClick={handlePopoverOpen}>
-                Collections
-              </HeaderTextItem>
-              <Menu
-                id='collection-menu'
-                open={open()}
-                anchorEl={anchorEl()}
-                MenuListProps={{
-                  'aria-labelledby': 'collection-btn',
-                }}
-                onClose={handlePopoverClose}>
-                <For
-                  each={collections()}
-                  children={(collection) => <MenuItem sx={{ p: 2 }}>{collection.title}</MenuItem>}
-                />
-              </Menu>
+              <LinkStyled href='/collections'>
+                <HeaderTextItem>Collections</HeaderTextItem>
+              </LinkStyled>
             </Grid>
             <Grid item xs={9} md={3} pr={2}>
               <CartContainer>
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+                <IconButton>
+                  <SettingsIcon />
+                </IconButton>
                 <IconButton>
                   <SearchIcon />
                 </IconButton>
@@ -117,8 +80,6 @@ const Header = () => {
         </Toolbar>
       </AppBar>
       <Drawer open={isOpenDrawer()} handleClose={() => setOpenDrawer(false)} />
-      <LoginModal />
-      <RegisterModal />
     </>
   );
 };
