@@ -10,6 +10,7 @@ const Home = lazy(() => import('./pages/home'));
 const SingleProduct = lazy(() => import('./pages/single-product'));
 const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
 const ProfileDetails = lazy(() => import('./pages/my-profile/detail'));
+const PageNotFound = lazy(() => import('./pages/page-not-found'));
 
 function App() {
   onMount(() => {
@@ -23,6 +24,7 @@ function App() {
         <Route path='/products' component={Products} />
         <Route path='/products/:productId' component={SingleProduct} />
         <Route path='/shopping-cart' component={ShoppingCart} />
+        <Route path='*' component={PageNotFound}/>
       </Route>
       <Route path='/my-profile' component={RouteGuard}>
         <Route path='/detail' component={ProfileDetails} />
