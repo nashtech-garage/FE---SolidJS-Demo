@@ -18,6 +18,7 @@ const themeConfig = createTheme({
   palette: {
     text: {
       primary: grey[900],
+      secondary: grey[500]
     },
     primary: {
       main: deepOrange[500],
