@@ -1,0 +1,17 @@
+.collection {
+  text-align: center;
+  img {
+    max-width: 100%;
+  }
+  &__content {
+    margin-top: 1rem;
+  }
+}
+
+.section-top-space {
+  padding-top: 70px;
+}
+
+.section-bottom-space {
+  padding-bottom: 70px;
+}
