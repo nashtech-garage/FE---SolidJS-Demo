@@ -6,28 +6,30 @@ const themeConfig = createTheme({
     MuiButton: {
       defaultProps: {
         style: {
-          "border-radius": 0
+          'border-radius': 0,
+          'border-width': '2px',
         },
-      }
-    }
+      },
+    },
   },
   typography: {
-    fontFamily: 'Lato'
+    fontFamily: 'Lato',
   },
   palette: {
     text: {
       primary: grey[900],
+      secondary: grey[500]
     },
     primary: {
       main: deepOrange[500],
     },
     secondary: {
       main: green[500],
-      contrastText: '#FFF'
+      contrastText: '#FFF',
     },
     info: {
       main: grey[500],
-    }
+    },
   },
 });
 
