@@ -53,7 +53,9 @@ export default {
     },
     authenticate(details) {
       const path = `/admin/auth`
-      return medusaRequest("POST", path, details)
+      const a = medusaRequest("POST", path, details);
+      console.log('a',a);
+      return a;
     },
     deauthenticate(details) {
       const path = `/admin/auth`

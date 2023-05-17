@@ -6,6 +6,7 @@ import { CartAction, dispatchCart } from './store';
 import RouteGuard from './route-guard/RouteGuard';
 
 const Products = lazy(() => import('./pages/products'));
+const Checkout = lazy(() => import('./pages/check-out'));
 const Home = lazy(() => import('./pages/home'));
 const SingleProduct = lazy(() => import('./pages/single-product'));
 const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
@@ -21,6 +22,7 @@ function App() {
       <Route path='/' element={<MainLayout />}>
         <Route path='/' component={Home} />
         <Route path='/products' component={Products} />
+        <Route path='/check-out' component={Checkout} />
         <Route path='/products/:productId' component={SingleProduct} />
         <Route path='/shopping-cart' component={ShoppingCart} />
       </Route>
