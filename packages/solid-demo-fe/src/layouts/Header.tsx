@@ -7,6 +7,7 @@ import { Link } from '@solidjs/router';
 import { cartStore } from '../store';
 import { SubHeader } from './SubHeader';
 import { Logo, Drawer } from '../components';
+import { LoginModal, RegisterModal } from '../modals';
 
 const Header = () => {
   const [isOpenDrawer, setOpenDrawer] = createSignal(false);
@@ -80,6 +81,8 @@ const Header = () => {
         </Toolbar>
       </AppBar>
       <Drawer open={isOpenDrawer()} handleClose={() => setOpenDrawer(false)} />
+      <LoginModal />
+      <RegisterModal />
     </>
   );
 };
