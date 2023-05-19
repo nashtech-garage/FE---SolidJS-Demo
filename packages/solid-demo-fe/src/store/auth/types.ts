@@ -5,8 +5,8 @@ export enum AuthAction {
 }
 
 export enum ModalType {
-  Login,
-  Register,
+  Login = 'LOGIN',
+  Register = 'REGISTER',
 }
 
 export interface IModalState {

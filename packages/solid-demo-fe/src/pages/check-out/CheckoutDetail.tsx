@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   FormControl,
   FormControlLabel,
@@ -94,6 +95,11 @@ const CheckoutDetail = () => {
             </Grid>
           </Grid>
         </PaymentMethodStyle>
+        <Grid item xs={12} sx={{ textAlign: 'right' }}>
+          <ButtonStyle type='submit' variant='contained' size='large'>
+            Place order
+          </ButtonStyle>
+        </Grid>
       </ListStyle>
     </CustomCard>
   );
@@ -144,5 +150,17 @@ const PaymentMethodStyle = styled(ListItem)(() => ({
     fontSize: '18px',
   },
 }));
+
+const ButtonStyle = styled(Button)({
+  padding: '13px 29px',
+  color: '#fff!important',
+  letterSpacing: '.05em',
+  border: '2px solid var(--theme-deafult)!important',
+  backgroundImage: 'linear-gradient(30deg,var(--theme-deafult) 50%,transparent 50%)!important',
+  backgroundSize: '850px',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 0,
+  transition: 'background .3s ease-in-out',
+});
 
 export default CheckoutDetail;
