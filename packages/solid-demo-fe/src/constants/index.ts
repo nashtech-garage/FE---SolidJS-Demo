@@ -63,3 +63,4 @@ export const SOCIAL_NETWORK_LIST = [
     alt: 'Twitter',
   },
 ];
+

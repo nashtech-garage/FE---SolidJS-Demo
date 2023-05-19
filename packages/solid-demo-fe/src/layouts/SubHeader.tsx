@@ -51,9 +51,14 @@ const SubHeader = () => {
           <Show
             when={!!authState.user}
             fallback={
-              <ButtonStyled onClick={handleClickOpenDialog} startIcon={<LoginIcon />}>
-                Log in
-              </ButtonStyled>
+              <>
+                <ButtonStyled onClick={handleClickOpenDialog} startIcon={<LoginIcon />}>
+                  Log in
+                </ButtonStyled>
+                <IconButtonStyled size='small' id='my-login-button' onClick={handleClickOpenDialog}>
+                  <LoginIcon fontSize='inherit' />
+                </IconButtonStyled>
+              </>
             }>
             <ButtonStyled
               startIcon={<PersonIcon />}
@@ -67,22 +72,21 @@ const SubHeader = () => {
               }}>
               My Account
             </ButtonStyled>
+            <IconButtonStyled
+              size='small'
+              id='my-account-button'
+              aria-controls={open() ? 'my-account-menu' : undefined}
+              aria-haspopup='true'
+              aria-expanded={open() ? 'true' : undefined}
+              onClick={(event) => {
+                setAnchorEl(event.currentTarget);
+              }}>
+              <PersonIcon fontSize='inherit' />
+            </IconButtonStyled>
           </Show>
-
           {/* Mobile view */}
           <IconButtonStyled size='small'>
             <FavoriteIcon fontSize='inherit' />
-          </IconButtonStyled>
-          <IconButtonStyled
-            size='small'
-            id='my-account-button'
-            aria-controls={open() ? 'my-account-menu' : undefined}
-            aria-haspopup='true'
-            aria-expanded={open() ? 'true' : undefined}
-            onClick={(event) => {
-              setAnchorEl(event.currentTarget);
-            }}>
-            <PersonIcon fontSize='inherit' />
           </IconButtonStyled>
           <Menu
             id='my-account-menu'

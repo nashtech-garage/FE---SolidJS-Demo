@@ -11,10 +11,13 @@ import {
   RadioGroup,
   styled,
 } from '@suid/material';
+import { For } from 'solid-js';
 import { createSignal } from 'solid-js';
+import { cartStore } from '../../store';
 
 const CheckoutDetail = () => {
   const [hovering, setHovering] = createSignal(false);
+  const cart = cartStore.cart;
 
   const addToCart = (event: MouseEvent) => {
     event.preventDefault();
@@ -43,18 +46,18 @@ const CheckoutDetail = () => {
         </ListItem>
         <ListItem divider disablePadding>
           <Grid container spacing={2}>
-            <Grid item xs={7} md={7}>
-              <ListItemText primary='Pink Slim Shirt × 1' />
-            </Grid>
-            <Grid item xs={5} md={5}>
-              <ItemPriceStyle primary='$25.10' />
-            </Grid>
-            <Grid item xs={7} md={7}>
-              <ListItemText primary='SLim Fit Jeans × 1' />
-            </Grid>
-            <Grid item xs={5} md={5}>
-              <ItemPriceStyle primary='$555.00' />
-            </Grid>
+            <For each={cart?.items}>
+              {(item) => (
+                <>
+                  <Grid item xs={7} md={7}>
+                    <ListItemText primary={`${item.title} x${item.quantity}`} />
+                  </Grid>
+                  <Grid item xs={5} md={5}>
+                    <ItemPriceStyle primary={`${item.total}`} />
+                  </Grid>
+                </>
+              )}
+            </For>
           </Grid>
         </ListItem>
         <ShippingMethodStyle divider disablePadding>
@@ -63,13 +66,13 @@ const CheckoutDetail = () => {
               <ShippingMethodLabelStyle primary='Subtotal' />
             </Grid>
             <Grid item xs={5} md={5}>
-              <ItemPriceStyle sx={{ color: 'red' }} primary='$25.10' />
+              <ItemPriceStyle sx={{ color: 'red' }} primary={`$${cart?.subtotal || 0}`} />
             </Grid>
             <Grid item xs={7} md={7}>
               <ShippingMethodLabelStyle primary='Shipping' />
             </Grid>
             <Grid item xs={5} md={5}>
-              <ItemPriceStyle primary='$555.00' />
+              <ItemPriceStyle primary={`$${cart?.shipping_total || 0}`} />
             </Grid>
           </Grid>
         </ShippingMethodStyle>
@@ -79,7 +82,7 @@ const CheckoutDetail = () => {
               <ListItemText sx={{ '& > span': { fontSize: '18px' } }} primary='Total' />
             </Grid>
             <Grid item xs={5} md={5}>
-              <ItemPriceStyle sx={{ color: 'red' }} primary='$620.00' />
+              <ItemPriceStyle sx={{ color: 'red' }} primary={`$${cart?.total || 0}`} />
             </Grid>
             <Grid item xs={12}>
               <FormControl>

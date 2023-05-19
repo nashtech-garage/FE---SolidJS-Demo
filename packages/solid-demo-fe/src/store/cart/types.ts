@@ -4,6 +4,7 @@ export enum CartAction {
   GetCart,
   SetCart,
   ClearCart,
+  CompleteCart
 }
 
 export interface CartState {
