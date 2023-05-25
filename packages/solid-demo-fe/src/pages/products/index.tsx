@@ -4,8 +4,8 @@ import { createQuery } from '@tanstack/solid-query';
 import { medusaClient } from '../../utils';
 import { ProductList } from '../../components';
 import { useLocation, useNavigate, useSearchParams } from '@solidjs/router';
-import { productFilterStore } from '../../store';
-import { createEffect, createResource, Show } from 'solid-js';
+import { ProductFilterAction, dispatchProductFilter, productFilterStore } from '../../store';
+import { createEffect, createResource, onCleanup, Show } from 'solid-js';
 import { getFilterOptions } from '../../utils/productHelper';
 
 import FilterWrapper from '../../components/Filter/FilterWrapper';
@@ -32,7 +32,10 @@ function Products() {
     if (data) {
       const queryStr = [
         collectionId ? `collectionId=${collectionId}` : '',
-        data.options.map(({ type, values }) => `${type}=${values.join(',')}`).join('&'),
+        data.options
+          .filter(({ values }) => values.length)
+          .map(({ type, values }) => `${type}=${values.join(',')}`)
+          .join('&'),
         data.sort ? `sort=${data.sort}` : '',
         data.numberOfColumns ? `numberOfColumns=${data.numberOfColumns}` : '',
       ]
@@ -58,6 +61,10 @@ function Products() {
   };
 
   const [filterOptions] = createResource(getFilterOptions);
+
+  onCleanup(() => {
+    dispatchProductFilter(ProductFilterAction.ClearFilter);
+  });
 
   return (
     <Container>
