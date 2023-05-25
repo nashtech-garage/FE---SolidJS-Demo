@@ -51,7 +51,7 @@ function Colllections() {
               each={products()}
               children={(collection) => (
                 <Grid item xs={12} sm={6} xl={3}>
-                  <CollectionItem title={collection.title} imgURL={collection.imgURL} />
+                  <CollectionItem id={collection.id} title={collection.title} imgURL={collection.imgURL} />
                 </Grid>
               )}></For>
           </Match>
