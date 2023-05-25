@@ -18,7 +18,6 @@ async function dispatchProductFilter(type: ProductFilterAction, payload?: any) {
   switch (type) {
     case ProductFilterAction.SortProduct:
     case ProductFilterAction.FilterProduct: {
-      console.log(productFilterStore, payload);
       setProductFilterStore('data', payload);
       break;
     }

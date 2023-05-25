@@ -1,5 +1,5 @@
 import { Checkbox, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled } from '@suid/material';
-import { Component } from 'solid-js';
+import { Component, splitProps } from 'solid-js';
 import { ProductFilterAction, dispatchProductFilter, productFilterStore } from '../../store/product';
 
 export interface IFilter {
@@ -9,8 +9,9 @@ export interface IFilter {
     value: string;
   }[];
 }
-const Filter: Component<IFilter> = ({ title, values: options }) => {
+const Filter: Component<IFilter> = (props) => {
   const productFilterData = () => productFilterStore.data;
+  const [{ title, values: options }] = splitProps(props, ['title', 'values']);
 
   const onFilter = async (value: string) => {
     const filterData = productFilterData();

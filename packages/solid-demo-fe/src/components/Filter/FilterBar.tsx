@@ -7,14 +7,14 @@ import List4Items from '../../assets/icons/4.png';
 import List6Items from '../../assets/icons/6.png';
 import { ProductFilterAction, dispatchProductFilter, productFilterStore } from '../../store';
 import { IDisplayTypes, enumDisplayTypes } from '../../types/ProductFilter';
-import { Component, Show } from 'solid-js';
+import { Component, Show, onCleanup } from 'solid-js';
 
 interface IFilterBarProps {
   count: number;
   offset: number;
   limit: number;
 }
-const FilterBar: Component<IFilterBarProps> = ({ count, offset, limit }) => {
+const FilterBar: Component<IFilterBarProps> = (props) => {
   const productFilterData = () => productFilterStore.data;
   const onSortingItems = async (event: any) => {
     const sort = event.target.value;
@@ -42,7 +42,7 @@ const FilterBar: Component<IFilterBarProps> = ({ count, offset, limit }) => {
     <FilterBarStyled>
       <Grid container sx={{ alignItems: 'center' }}>
         <Grid item lg={4}>
-          Showing Products {offset * limit + 1}-{Math.min(count, (offset + 1) * limit)} Of {count} Result
+          Showing Products {props.offset * props.limit + 1}-{Math.min(props.count, (props.offset + 1) * props.limit)} Of {props.count} Result
         </Grid>
         <Grid item lg={5} sx={groupStyled}>
           <Grid container sx={{ alignItems: 'center' }}>
