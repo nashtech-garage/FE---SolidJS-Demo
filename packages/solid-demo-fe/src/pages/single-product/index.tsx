@@ -28,7 +28,7 @@ function SingleProduct() {
   const handleAddToCart = async () => {
     const variantId = variant()?.id
     if (variantId) {
-      addProduct(variantId, quantity(), (newCart) => dispatchCart(CartAction.SetCart, newCart));
+      await addProduct(variantId, quantity(), (newCart) => dispatchCart(CartAction.SetCart, newCart));
     }
   };
 

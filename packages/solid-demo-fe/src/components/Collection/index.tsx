@@ -3,10 +3,11 @@ import { A } from '@solidjs/router';
 import { Button, Typography } from '@suid/material';
 
 interface ICollectionItemProps {
+   id: string;
   title: string;
   imgURL: string;
 }
-const CollectionItem: Component<ICollectionItemProps> = ({ title, imgURL }) => {
+const CollectionItem: Component<ICollectionItemProps> = ({ id, title, imgURL }) => {
   return (
     <div class='collection'>
       <img src={imgURL} alt={title} />
@@ -17,7 +18,7 @@ const CollectionItem: Component<ICollectionItemProps> = ({ title, imgURL }) => {
         <Typography variant='subtitle2' sx={{ marginBottom: '0.6em' }}>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry....
         </Typography>
-        <A href='/products'>
+        <A href={`/products?collectionId=${id}`}>
           <Button variant='outlined'>SHOP NOW</Button>
         </A>
       </div>
