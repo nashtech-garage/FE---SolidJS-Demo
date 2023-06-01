@@ -62,12 +62,6 @@ const Header = () => {
                 <IconButton>
                   <SettingsIcon />
                 </IconButton>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
                 <Link href='/shopping-cart'>
                   <IconButton>
                     <Badge badgeContent={cart()?.items.length} color='primary'>
