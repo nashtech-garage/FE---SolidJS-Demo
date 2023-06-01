@@ -61,7 +61,6 @@ const Filter: Component<IFilter> = (props) => {
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {options.map(({ id, value }) => {
             const labelId = `checkbox-list-label-${value}`;
-
             return (
               <ListItem key={id} sx={{ padding: '0 8px' }}>
                 <ListItemButton role={undefined} onClick={() => onFilter(value)} dense>

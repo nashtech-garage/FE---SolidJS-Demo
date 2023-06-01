@@ -26,6 +26,7 @@ function App() {
         <Route path='/products/:productId' component={SingleProduct} />
         <Route path='/shopping-cart' component={ShoppingCart} />
         <Route path='/collections' component={Collections} />
+        <Route path='/collections/:collectionId' component={Products} />
       </Route>
       <Route path='/my-profile' component={RouteGuard}>
         <Route path='/detail' component={ProfileDetails} />
