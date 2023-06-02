@@ -79,7 +79,7 @@ const FilterBar: Component<IFilterBarProps> = (props) => {
           </Grid>
         </Grid>
         <Grid item lg={3} sx={{ padding: '0 20px' }}>
-          <Select variant='standard' onchange={onSortingItems} fullWidth>
+          <Select variant='standard' onChange={onSortingItems} fullWidth>
             <MenuItem value={-1}>Sorting Items</MenuItem>
             <MenuItem value={0}>Alphabetically A-Z</MenuItem>
             <MenuItem value={1}>Alphabetically Z-A</MenuItem>
