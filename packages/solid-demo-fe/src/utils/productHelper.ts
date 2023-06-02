@@ -1,9 +1,10 @@
 import { ProductVariant } from '@medusajs/medusa';
 import { ICart } from '../types/Cart';
 import { medusaClient } from './medusaClient';
+import { BASE_API_URL } from '../constants';
 
 export function formatPrice(price?: number | null) {
-  if (!price) return ''
+  if (!price) return '';
   return '$' + (price / 100).toFixed(2);
 }
 
@@ -55,6 +56,11 @@ export async function addProduct(variantId: string, quantity: number, onCartChan
 }
 
 export async function getFilterOptions() {
-  const res = await fetch('http://localhost:9005/store/option-filter');
+  const res = await fetch(`${BASE_API_URL}/store/option-filter`);
+  return res.json();
+}
+
+export async function filterProduct(params: string) {
+  const res = await fetch(`${BASE_API_URL}/store/product-filter?${params}`);
   return res.json();
 }

@@ -63,3 +63,5 @@ export const SOCIAL_NETWORK_LIST = [
     alt: 'Twitter',
   },
 ];
+
+export const BASE_API_URL = 'http://localhost:9005';
