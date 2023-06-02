@@ -13,10 +13,10 @@ import {
   styled,
 } from '@suid/material';
 import { LineItem } from '@medusajs/medusa';
-import { Link } from '@solidjs/router';
+import { Link, useNavigate } from '@solidjs/router';
 
 import { PageTitleWrapper } from '../../components';
-import { CartAction, cartStore, dispatchCart } from '../../store'
+import { CartAction, cartStore, dispatchCart } from '../../store';
 import { medusaClient } from '../../utils';
 import CounterButton from '../../components/CounterButton';
 import { formatPrice } from '../../utils/productHelper';
@@ -36,12 +36,12 @@ const columns: Column[] = [
 ];
 
 function ShoppingCart() {
-  const cart = () => cartStore.cart
-
+  const cart = () => cartStore.cart;
+  const navigate = useNavigate();
   const removeItem = async (item: LineItem) => {
     try {
       const { cart } = await medusaClient.carts.lineItems.delete(item.cart_id, item.id);
-      dispatchCart(CartAction.SetCart, cart)
+      dispatchCart(CartAction.SetCart, cart);
     } catch (error) {
       console.log('Remove item error:', error);
     }
@@ -52,13 +52,14 @@ function ShoppingCart() {
       const { cart } = await medusaClient.carts.lineItems.update(item.cart_id, item.id, {
         quantity: nextQuantity,
       });
-      dispatchCart(CartAction.SetCart, cart)
+      dispatchCart(CartAction.SetCart, cart);
     } catch (error) {
       console.log('Update quantity error:', error);
     }
   };
 
   const handleCheckout = () => {
+    navigate('/check-out');
     console.log(cart());
   };
 

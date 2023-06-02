@@ -1,6 +1,7 @@
 @import 'normalize.css';
 
 // Components
+@import './layout/global.scss';
 @import './components/Slider.scss';
 @import './components/Snackbar.scss';
 @import './components/HeroBanner.scss';
