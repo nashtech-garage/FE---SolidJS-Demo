@@ -53,3 +53,8 @@ export async function addProduct(variantId: string, quantity: number, onCartChan
     }
   }
 }
+
+export async function getFilterOptions() {
+  const res = await fetch('http://localhost:9005/store/option-filter');
+  return res.json();
+}

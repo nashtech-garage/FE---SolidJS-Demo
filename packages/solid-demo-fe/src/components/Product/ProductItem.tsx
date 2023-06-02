@@ -1,12 +1,12 @@
-import { Component, Accessor, splitProps, createSignal } from 'solid-js';
-import { Box, Typography, Grow, styled } from '@suid/material';
+import { Component, Accessor, splitProps, createSignal, Show } from 'solid-js';
+import { Box, Typography, Grow, styled, Grid } from '@suid/material';
 import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
 import { Product } from '@medusajs/medusa';
 
 import { addProduct, getProductPrice } from '../../utils/productHelper';
-import { CartAction, dispatchCart } from '../../store';
-
+import { CartAction, dispatchCart, productFilterStore } from '../../store';
+import { enumDisplayTypes } from '../../types/ProductFilter';
 
 interface ProductItemProps {
   product: Product;
@@ -19,10 +19,11 @@ const ProductItem: Component<ProductItemProps> = (props) => {
   const [hovering, setHovering] = createSignal(false);
   const [{ product, index }] = splitProps(props, ['product', 'index']);
   const { title, thumbnail } = product;
+  const productFilter = () => productFilterStore.data;
 
-  const addToCart = (event: MouseEvent) => {
+  const addToCart = async (event: MouseEvent) => {
     event.preventDefault();
-    addProduct(product.variants[0].id, 1, (updated) => dispatchCart(CartAction.SetCart, updated));
+    await addProduct(product.variants[0].id, 1, (updated) => dispatchCart(CartAction.SetCart, updated));
   };
 
   const addToFavorite = () => {
@@ -37,30 +38,66 @@ const ProductItem: Component<ProductItemProps> = (props) => {
     <Grow in={index() > -1} style={{ transformOrigin: '0 0 0' }} timeout={1000}>
       <Container>
         <LinkStyled href={`/products/${product.id}`}>
-          <ImageContainer onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-            <Image src={thumbnail || undefined} />
-            <ListOption classList={{ hovering: hovering() }}>
-              <span>
-                <ShoppingCartOutlined onClick={addToCart} />
-              </span>
-              <span>
-                <FavoriteBorderOutlined onClick={addToFavorite} />
-              </span>
-              <span>
-                <SearchOutlined onClick={openQuickView} />
-              </span>
-            </ListOption>
-          </ImageContainer>
-          <Box>
+          <Box
+            sx={
+              productFilter()?.displayType === enumDisplayTypes.LIST
+                ? {
+                    display: 'grid',
+                    gap: '1rem',
+                    gridTemplateColumns: {
+                      xs: '25% 75%',
+                      lg: '25% 75%',
+                    },
+                  }
+                : {
+                    display: 'grid',
+                    gap: '1rem',
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                    },
+                  }
+            }>
+            <ImageContainer onMouseOver={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+              <Image src={thumbnail || undefined} />
+              <ListOption classList={{ hovering: hovering() }}>
+                <span>
+                  <ShoppingCartOutlined onClick={addToCart} />
+                </span>
+                <span>
+                  <FavoriteBorderOutlined onClick={addToFavorite} />
+                </span>
+                <span>
+                  <SearchOutlined onClick={openQuickView} />
+                </span>
+              </ListOption>
+            </ImageContainer>
             <Box>
-              <StarStyled />
-              <StarStyled />
-              <StarStyled />
-              <StarStyled />
-              <StarStyled />
+              <Box>
+                <StarStyled />
+                <StarStyled />
+                <StarStyled />
+                <StarStyled />
+                <StarStyled />
+              </Box>
+              <Title
+                color='#777'
+                sx={
+                  productFilter()?.displayType === enumDisplayTypes.LIST
+                    ? {
+                        fontWeight: 700,
+                        paddingBottom: '5px',
+                      }
+                    : {}
+                }>
+                {title}
+              </Title>
+              <Show when={productFilter()?.displayType === enumDisplayTypes.LIST}>
+                <Description variant='subtitle1' class='product__description'>
+                  {product.description}
+                </Description>
+              </Show>
+              <PriceTag>{getProductPrice(product.variants[0])}</PriceTag>
             </Box>
-            <Title color='#777'>{title}</Title>
-            <PriceTag>{getProductPrice(product.variants[0])}</PriceTag>
           </Box>
           <NewTag>NEW</NewTag>
         </LinkStyled>
@@ -77,7 +114,6 @@ const LinkStyled = styled(A)({
   textDecoration: 'none',
   display: 'flex',
   flexDirection: 'column',
-
 });
 
 const ImageContainer = styled(Box)({
@@ -93,9 +129,18 @@ const Image = styled('img')({
 const Title = styled(Typography)({
   color: '#777',
   fontWeight: 400,
+  fontSize: 16,
+  lineHeight: 1,
+  marginBottom: 4,
+});
+
+const Description = styled(Typography)({
+  color: '#777',
+  fontWeight: 400,
   fontSize: 14,
   lineHeight: 1,
   marginBottom: 4,
+  paddingBottom: 5,
 });
 
 const PriceTag = styled(Typography)({
