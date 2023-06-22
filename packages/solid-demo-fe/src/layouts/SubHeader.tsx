@@ -7,7 +7,7 @@ import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
   Login as LoginIcon,
 } from '@suid/icons-material';
-import { useNavigate } from '@solidjs/router';
+import { A, useNavigate } from '@solidjs/router';
 
 import { authStore } from '../store';
 import { ModalType } from '../store/auth/types';
@@ -47,7 +47,9 @@ const SubHeader = () => {
           </CallUsTextStyled>
         </LeftBoxStyled>
         <ToolBoxStyled item xs={6} md={6}>
-          <ButtonStyled startIcon={<FavoriteIcon />}>Wishlist</ButtonStyled>
+          <ButtonStyled startIcon={<FavoriteIcon />}>
+            <A href='/wishlist'>Wishlist</A>
+          </ButtonStyled>
           <Show
             when={!!authState.user}
             fallback={
