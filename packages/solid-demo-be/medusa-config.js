@@ -34,6 +34,7 @@ const REDIS_URL = process.env.REDIS_URL;
 const plugins = [
   `medusa-fulfillment-manual`,
   `medusa-payment-manual`,
+  `medusa-plugin-wishlist`,
   // To enable the admin plugin, uncomment the following lines and run `yarn add @medusajs/admin`
   // {
   //   resolve: "@medusajs/admin",

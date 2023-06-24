@@ -1,5 +1,5 @@
 import { Component, Accessor, splitProps, createSignal, Show } from 'solid-js';
-import { Box, Typography, Grow, styled, Grid } from '@suid/material';
+import { Box, Typography, Grow, styled } from '@suid/material';
 import { A } from '@solidjs/router';
 import { Star, ShoppingCartOutlined, FavoriteBorderOutlined, SearchOutlined } from '@suid/icons-material';
 import { Product } from '@medusajs/medusa';
@@ -26,8 +26,14 @@ const ProductItem: Component<ProductItemProps> = (props) => {
     await addProduct(product.variants[0].id, 1, (updated) => dispatchCart(CartAction.SetCart, updated));
   };
 
-  const addToFavorite = () => {
-    console.log('==========addToFavorite==================');
+  const addToFavorite = (event: MouseEvent) => {
+    event.preventDefault();
+    const wishlistItems: Product[] = JSON.parse(localStorage.getItem('wishlistItems') ?? '[]') || [];
+    const isExist = wishlistItems.some((item) => item.id === product.id);
+    if (!isExist) {
+      wishlistItems.push(product);
+      localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+    }
   };
 
   const openQuickView = () => {

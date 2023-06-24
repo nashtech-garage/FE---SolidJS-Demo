@@ -13,6 +13,7 @@ const ShoppingCart = lazy(() => import('./pages/shopping-cart'));
 const ProfileDetails = lazy(() => import('./pages/my-profile/detail'));
 const PageNotFound = lazy(() => import('./pages/page-not-found'));
 const Collections = lazy(() => import('./pages/collections'));
+const Wishlist = lazy(() => import('./pages/wishlist'));
 
 function App() {
   onMount(() => {
@@ -29,11 +30,12 @@ function App() {
         <Route path='/shopping-cart' component={ShoppingCart} />
         <Route path='/collections' component={Collections} />
         <Route path='/collections/:collectionId' component={Products} />
+        <Route path='/wishlist' component={Wishlist} />
       </Route>
       <Route path='/my-profile' component={RouteGuard}>
         <Route path='/detail' component={ProfileDetails} />
       </Route>
-      <Route path='*' component={PageNotFound}/>
+      <Route path='*' component={PageNotFound} />
     </Routes>
   );
 }
